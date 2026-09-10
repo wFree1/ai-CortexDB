@@ -62,6 +62,13 @@
           载入演示库
         </button>
 
+        <button class="btn btn-copilot" id="btn-toggle-copilot" title="打开 CortexDB AI 原生智能助手">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+          AI Copilot
+        </button>
+
         <button class="btn btn-icon" id="btn-refresh-all" title="刷新数据库对象树">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="23 4 23 10 17 10"></polyline>
@@ -132,6 +139,73 @@
           <!-- 动态渲染激活的 Tab 内容 (查询视图、表数据视图、表结构视图) -->
         </div>
       </main>
+
+      <!-- AI 原生 Copilot 抽屉 (CortexDB Agent Side Panel) -->
+      <aside id="copilot-drawer" class="copilot-drawer">
+        <div class="copilot-header">
+          <div class="copilot-title-group">
+            <div class="copilot-badge">
+              <span class="sparkle-icon">✨</span>
+              <span class="copilot-title">CortexDB Copilot</span>
+            </div>
+            <span class="copilot-sub">Database-Native Agent</span>
+          </div>
+          <div class="copilot-actions">
+            <span class="agent-mode-tag" id="agent-mode-tag" title="执行底座">Native Runtime</span>
+            <button class="btn-icon" id="btn-close-copilot" title="收起 Copilot">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- 消息历史与执行链路容器 -->
+        <div class="copilot-chat-viewport" id="copilot-chat-container">
+          <div class="copilot-welcome">
+            <div class="welcome-icon">⚡</div>
+            <h4>欢迎使用 CortexDB 数据库原生智能体</h4>
+            <p>由 DataSphere 确定性内核与 LangGraph 深度协同驱动。支持自然语言生成 SQL、编译前置预检、语法自愈修复与 DBA 性能诊断调优。</p>
+            <div class="quick-prompts-title">快速体验：</div>
+            <div class="quick-prompts">
+              <button class="prompt-chip" data-prompt="查询每个部门平均工资超过 20000 的部门">💰 部门平均薪资</button>
+              <button class="prompt-chip" data-prompt="SELECT name, salaryy FROM employees;">🔧 拼写自愈测试 (salaryy)</button>
+              <button class="prompt-chip" data-prompt="为什么 employees 查询很慢？请诊断">🐢 慢查询性能诊断</button>
+              <button class="prompt-chip" data-prompt="帮我优化 employees 查询并给出索引建议">🚀 索引优化与预估</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 审批待处理挂起横幅 (Human Approval Banner) -->
+        <div class="copilot-approval-banner hidden" id="copilot-approval-banner">
+          <div class="approval-header">
+            <span class="warn-icon">⚠️</span>
+            <span class="approval-title">操作需要管理员人工审批</span>
+          </div>
+          <div class="approval-body" id="approval-desc">CREATE INDEX ...</div>
+          <div class="approval-btn-group">
+            <button class="btn btn-sm btn-danger" id="btn-reject-approval">拒绝操作</button>
+            <button class="btn btn-sm btn-success" id="btn-confirm-approval">批准并执行</button>
+          </div>
+        </div>
+
+        <!-- 底部输入区 -->
+        <div class="copilot-input-box">
+          <div class="input-wrapper">
+            <textarea id="copilot-input" placeholder="输入自然语言需求，例如：'找出薪水最高的前5名员工'..." rows="2"></textarea>
+            <button class="btn-send-copilot" id="btn-send-copilot" title="发送 (Enter)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </div>
+          <div class="copilot-footnote">
+            <span>确定性内核校验已开启 (Compiler Pre-check)</span>
+          </div>
+        </div>
+      </aside>
     </div>
 
     <!-- 底部状态栏 -->

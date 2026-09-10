@@ -854,6 +854,204 @@
   };
 
   // ==========================================================================
+  // CortexDB Native AI Copilot Controller
+  // ==========================================================================
+  const copilotEl = {
+    btnToggle: document.getElementById('btn-toggle-copilot'),
+    drawer: document.getElementById('copilot-drawer'),
+    btnClose: document.getElementById('btn-close-copilot'),
+    chatContainer: document.getElementById('copilot-chat-container'),
+    input: document.getElementById('copilot-input'),
+    btnSend: document.getElementById('btn-send-copilot'),
+    approvalBanner: document.getElementById('copilot-approval-banner'),
+    approvalDesc: document.getElementById('approval-desc'),
+    btnConfirmApproval: document.getElementById('btn-confirm-approval'),
+    btnRejectApproval: document.getElementById('btn-reject-approval')
+  };
+
+  let currentPendingApprovalId = null;
+
+  function toggleCopilot(forceOpen = null) {
+    if (!copilotEl.drawer) return;
+    if (forceOpen === true) {
+      copilotEl.drawer.classList.remove('closed');
+    } else if (forceOpen === false) {
+      copilotEl.drawer.classList.add('closed');
+    } else {
+      copilotEl.drawer.classList.toggle('closed');
+    }
+  }
+
+  function appendUserMessage(text) {
+    const msg = document.createElement('div');
+    msg.className = 'chat-msg user';
+    msg.innerHTML = `<div class="chat-bubble-user">${escapeHtml(text)}</div>`;
+    copilotEl.chatContainer.appendChild(msg);
+    copilotEl.chatContainer.scrollTop = copilotEl.chatContainer.scrollHeight;
+  }
+
+  function appendAgentLoading() {
+    const id = 'agent-loading-' + Date.now();
+    const msg = document.createElement('div');
+    msg.className = 'chat-msg agent';
+    msg.id = id;
+    msg.innerHTML = `
+      <div class="chat-bubble-agent">
+        <div style="display:flex; align-items:center; gap:8px; color:#a5b4fc;">
+          <span style="font-size:14px;">⚡</span>
+          <span>CortexDB 内核正在分析意图、召回 Schema 并前置编译校验...</span>
+        </div>
+      </div>
+    `;
+    copilotEl.chatContainer.appendChild(msg);
+    copilotEl.chatContainer.scrollTop = copilotEl.chatContainer.scrollHeight;
+    return id;
+  }
+
+  function insertSqlToEditor(sql) {
+    const activeTab = state.tabs.find(t => t.id === state.activeTabId && t.type === 'query');
+    if (activeTab) {
+      activeTab.sql = sql;
+      const ta = document.getElementById(`editor-textarea-${activeTab.id}`);
+      if (ta) ta.value = sql;
+    } else {
+      createNewQueryTab(sql);
+    }
+    el.footerExecStats.textContent = 'SQL 已填入当前查询窗口';
+  }
+
+  function runSqlDirectly(sql) {
+    insertSqlToEditor(sql);
+    executeCurrentQuery();
+  }
+
+  window.Studio = window.Studio || {};
+  window.Studio.insertSql = insertSqlToEditor;
+  window.Studio.runSqlDirect = runSqlDirectly;
+
+  function renderAgentTraceTimeline(data) {
+    const steps = [];
+    steps.push({ name: '意图推断 (Intent)', status: 'success', time: data.intent || 'query' });
+    steps.push({ name: 'Schema 动态精简检索', status: 'success', time: 'Catalog' });
+
+    const val = data.validation || {};
+    if (val.valid) {
+      const retries = data.retry_count || 0;
+      if (retries > 0) {
+        steps.push({ name: `自愈修复通过 (Recovery Retried: ${retries})`, status: 'warn', time: 'Healed' });
+      } else {
+        steps.push({ name: '内核编译前置质检 (Compiler Pre-check)', status: 'success', time: 'PASS' });
+      }
+    } else {
+      steps.push({ name: '内核编译前置质检 (Compiler Pre-check)', status: 'failed', time: 'FAIL' });
+    }
+
+    if (data.explain) {
+      steps.push({ name: '逻辑与物理执行计划 (Explain)', status: 'success', time: 'Planner' });
+    }
+
+    if (data.execution_result) {
+      const ms = data.execution_result.latency_ms || 0;
+      const rows = data.execution_result.data ? data.execution_result.data.length : 0;
+      steps.push({ name: `物理存储引擎执行成功 (${rows} 行)`, status: 'success', time: `${ms} ms` });
+    } else if (data.approval_required) {
+      steps.push({ name: '安全门禁拦截，等待管理员人工审批', status: 'warn', time: data.risk_level || 'ADMIN' });
+    }
+
+    let html = `<div class="trace-timeline">`;
+    for (const s of steps) {
+      const icon = s.status === 'success' ? '✓' : (s.status === 'failed' ? '❌' : '⚠️');
+      html += `
+        <div class="trace-step ${s.status}">
+          <span class="step-icon">${icon}</span>
+          <span class="step-name">${s.name}</span>
+          <span class="step-time">${s.time}</span>
+        </div>
+      `;
+    }
+    html += `</div>`;
+    return html;
+  }
+
+  function appendAgentResponse(data) {
+    const msg = document.createElement('div');
+    msg.className = 'chat-msg agent';
+
+    let contentHtml = '';
+    contentHtml += renderAgentTraceTimeline(data);
+
+    if (data.generated_sql) {
+      const escapedSql = escapeHtml(data.generated_sql);
+      const encodedSql = encodeURIComponent(data.generated_sql);
+      contentHtml += `
+        <div class="copilot-sql-card">
+          <div class="sql-card-header">
+            <span>生成 SQL 语句</span>
+            <span>DataSphere Dialect</span>
+          </div>
+          <div class="sql-card-code">${escapedSql}</div>
+          <div class="sql-card-actions">
+            <button class="btn-sql-action btn-insert-sql" onclick="window.Studio.insertSql(decodeURIComponent('${encodedSql}'))">
+              <span>📝 填入查询</span>
+            </button>
+            <button class="btn-sql-action btn-exec-sql" onclick="window.Studio.runSqlDirect(decodeURIComponent('${encodedSql}'))">
+              <span>▶ 直接运行</span>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    if (data.answer) {
+      contentHtml += `<div style="white-space:pre-wrap; margin-top:6px;">${escapeHtml(data.answer)}</div>`;
+    }
+
+    msg.innerHTML = `<div class="chat-bubble-agent">${contentHtml}</div>`;
+    copilotEl.chatContainer.appendChild(msg);
+    copilotEl.chatContainer.scrollTop = copilotEl.chatContainer.scrollHeight;
+
+    // 处理审批
+    if (data.approval_required && data.approval_request_id) {
+      currentPendingApprovalId = data.approval_request_id;
+      copilotEl.approvalDesc.textContent = `${data.generated_sql} [单号: ${currentPendingApprovalId}]`;
+      copilotEl.approvalBanner.classList.remove('hidden');
+    }
+  }
+
+  async function handleSendCopilot(customQuery = null) {
+    const query = (customQuery || copilotEl.input.value).trim();
+    if (!query) return;
+
+    if (!customQuery) {
+      copilotEl.input.value = '';
+    }
+
+    toggleCopilot(true);
+    appendUserMessage(query);
+    const loadingId = appendAgentLoading();
+
+    try {
+      const res = await apiPost('/api/agent/chat', {
+        query: query,
+        session_id: 'navicat_web_copilot'
+      });
+
+      const loadingElem = document.getElementById(loadingId);
+      if (loadingElem) loadingElem.remove();
+
+      appendAgentResponse(res);
+    } catch (err) {
+      const loadingElem = document.getElementById(loadingId);
+      if (loadingElem) loadingElem.remove();
+
+      const errMsg = document.createElement('div');
+      errMsg.className = 'chat-msg agent';
+      errMsg.innerHTML = `<div class="chat-bubble-agent" style="color:#fb7185;">请求 Copilot 失败: ${escapeHtml(err.message)}</div>`;
+      copilotEl.chatContainer.appendChild(errMsg);
+    }
+  }
+
+  // ==========================================================================
   // 事件监听绑定与初始化
   // ==========================================================================
 
@@ -884,6 +1082,70 @@
     renderObjectTree();
   });
 
+  // Copilot 事件绑定
+  if (copilotEl.btnToggle) {
+    copilotEl.btnToggle.addEventListener('click', () => toggleCopilot());
+  }
+  if (copilotEl.btnClose) {
+    copilotEl.btnClose.addEventListener('click', () => toggleCopilot(false));
+  }
+  if (copilotEl.btnSend) {
+    copilotEl.btnSend.addEventListener('click', () => handleSendCopilot());
+  }
+  if (copilotEl.input) {
+    copilotEl.input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        handleSendCopilot();
+      }
+    });
+  }
+
+  // 快速体验 prompt chip 点击
+  document.querySelectorAll('.prompt-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const promptText = btn.getAttribute('data-prompt');
+      if (promptText) {
+        handleSendCopilot(promptText);
+      }
+    });
+  });
+
+  // 审批批准 / 拒绝
+  if (copilotEl.btnConfirmApproval) {
+    copilotEl.btnConfirmApproval.addEventListener('click', async () => {
+      if (!currentPendingApprovalId) return;
+      try {
+        const res = await apiPost('/api/agent/approve', { request_id: currentPendingApprovalId });
+        copilotEl.approvalBanner.classList.add('hidden');
+        alert("✓ 审批通过并已成功执行变更！");
+        await refreshDatabaseMeta();
+        appendAgentResponse({
+          answer: "✓ 管理员人工审批已通过，已完成底层数据库 DDL/运维变更执行。",
+          execution_result: res.result
+        });
+      } catch (e) {
+        alert("审批执行失败: " + e.message);
+      }
+    });
+  }
+
+  if (copilotEl.btnRejectApproval) {
+    copilotEl.btnRejectApproval.addEventListener('click', async () => {
+      if (!currentPendingApprovalId) return;
+      try {
+        await apiPost('/api/agent/reject', { request_id: currentPendingApprovalId });
+        copilotEl.approvalBanner.classList.add('hidden');
+        alert("已拒绝该操作。");
+        appendAgentResponse({
+          answer: "❌ 该操作已被管理员驳回，未对数据库结构做出修改。"
+        });
+      } catch (e) {
+        alert("操作失败: " + e.message);
+      }
+    });
+  }
+
   // 全局键盘快捷键
   window.addEventListener('keydown', (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
@@ -901,3 +1163,4 @@
 
   init();
 })();
+

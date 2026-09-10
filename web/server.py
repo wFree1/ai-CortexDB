@@ -30,6 +30,20 @@ def get_db():
     return db_instance
 
 
+agent_service_instance = None
+
+
+def get_agent_service():
+    global agent_service_instance
+    if agent_service_instance is None:
+        from agent.runtime.adapter import CortexDBAdapter
+        from agent.services.execution import ExecutionService
+        adapter = CortexDBAdapter(db=get_db())
+        agent_service_instance = ExecutionService(adapter=adapter)
+    return agent_service_instance
+
+
+
 def seed_demo_data(db: DataSphereDB):
     """预设丰富且包含各类工业级数据类型的演示数据"""
     stmts = [
@@ -298,6 +312,26 @@ class StudioRequestHandler(BaseHTTPRequestHandler):
                 })
                 return
 
+            # Agent 相关 GET 路由
+            if path == '/api/agent/diagnose':
+                svc = get_agent_service()
+                self._send_json(svc.adapter.get_diagnostics())
+                return
+
+            if path == '/api/agent/metrics':
+                svc = get_agent_service()
+                self._send_json({
+                    "database": svc.adapter.get_buffer_metrics(),
+                    "agent": svc.metrics.get_snapshot()
+                })
+                return
+
+            if path == '/api/agent/pending_approvals':
+                svc = get_agent_service()
+                pending = svc.firewall.approval_mgr.list_pending()
+                self._send_json([p.dict() for p in pending])
+                return
+
         self.send_error(404, "Endpoint not found")
 
     def do_POST(self):
@@ -368,6 +402,47 @@ class StudioRequestHandler(BaseHTTPRequestHandler):
                     "total_execution_time_ms": total_cost_ms,
                     "results": results
                 })
+                return
+
+            # Agent 相关 POST 路由
+            if path == '/api/agent/chat':
+                query_text = req_data.get('query', '').strip()
+                session_id = req_data.get('session_id', 'studio_session')
+                if not query_text:
+                    self._send_json({"error": "Empty query"}, status=400)
+                    return
+                svc = get_agent_service()
+                res = svc.run(query=query_text, session_id=session_id)
+                self._send_json(res)
+                return
+
+            if path == '/api/agent/approve':
+                request_id = req_data.get('request_id', '')
+                svc = get_agent_service()
+                mgr = svc.firewall.approval_mgr
+                req = mgr.get_request(request_id)
+                if not req:
+                    self._send_json({"success": False, "error": "Approval request not found"}, status=404)
+                    return
+                if mgr.approve(request_id):
+                    exec_res = svc.adapter.execute(req.sql)
+                    svc.hooks.trigger_on_approval(req.task_id, request_id, req.sql, "APPROVED")
+                    self._send_json({"success": True, "status": "APPROVED", "result": exec_res})
+                else:
+                    self._send_json({"success": False, "error": "Request cannot be approved"}, status=400)
+                return
+
+            if path == '/api/agent/reject':
+                request_id = req_data.get('request_id', '')
+                svc = get_agent_service()
+                mgr = svc.firewall.approval_mgr
+                if mgr.reject(request_id):
+                    req = mgr.get_request(request_id)
+                    if req:
+                        svc.hooks.trigger_on_approval(req.task_id, request_id, req.sql, "REJECTED")
+                    self._send_json({"success": True, "status": "REJECTED"})
+                else:
+                    self._send_json({"success": False, "error": "Request cannot be rejected"}, status=400)
                 return
 
         self.send_error(404, "Endpoint not found")
