@@ -1,0 +1,29 @@
+{
+  "departments": [
+    4,
+    12
+  ],
+  "employees": [
+    6,
+    13
+  ],
+  "products": [
+    8,
+    14
+  ],
+  "orders": [
+    10,
+    15
+  ],
+  "student": [
+    16,
+    22
+  ],
+  "class": [
+    18,
+    23
+  ],
+  "dept": [
+    20
+  ]
+}

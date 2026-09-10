@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DataSphere Studio | Navicat Web Edition</title>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div id="app-container">
+    <!-- 顶部导航栏 (Navicat Header & Global Toolbar) -->
+    <header id="app-header">
+      <div class="header-left">
+        <div class="logo-area">
+          <div class="logo-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+              <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
+              <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
+            </svg>
+          </div>
+          <div class="logo-text">
+            <span class="brand-title">DataSphere <span class="badge-studio">Studio</span></span>
+            <span class="brand-sub">Navicat Web Edition</span>
+          </div>
+        </div>
+
+        <div class="db-status-pill" id="db-status-badge">
+          <span class="status-dot online"></span>
+          <span id="header-db-name">datasphere.db</span>
+          <span class="pill-divider">|</span>
+          <span id="header-hit-rate" title="BufferPool 缓存命中率">命中率: 100%</span>
+        </div>
+      </div>
+
+      <div class="header-toolbar">
+        <button class="btn btn-primary" id="btn-run-sql" title="执行当前 SQL (快捷键: Ctrl + Enter)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          运行查询
+        </button>
+
+        <button class="btn btn-secondary" id="btn-new-query" title="新建 SQL 查询窗口">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          新建查询
+        </button>
+
+        <button class="btn btn-secondary" id="btn-seed-demo" title="载入丰富的工业级演示数据集">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+          载入演示库
+        </button>
+
+        <button class="btn btn-icon" id="btn-refresh-all" title="刷新数据库对象树">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- 主体区域：左侧对象树 + 右侧工作台 -->
+    <div id="main-layout">
+      <!-- 左侧：Navicat 对象导航树 (Object Explorer) -->
+      <aside id="sidebar-explorer">
+        <div class="explorer-header">
+          <span class="explorer-title">对象导航 (Explorer)</span>
+          <span class="table-count-badge" id="sidebar-table-count">0 张表</span>
+        </div>
+
+        <div class="search-box">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="filter-tables" placeholder="过滤表名或字段...">
+        </div>
+
+        <div class="tree-container" id="database-tree">
+          <!-- 动态渲染树 -->
+          <div class="tree-loading">加载数据库对象...</div>
+        </div>
+
+        <!-- 底层存储监控小部件 -->
+        <div class="storage-widget" id="storage-widget">
+          <div class="widget-title">
+            <span>BufferPool 存储引擎</span>
+            <span class="dot-live"></span>
+          </div>
+          <div class="widget-metrics">
+            <div class="metric-item">
+              <span class="lbl">表空间</span>
+              <span class="val" id="metric-db-size">0 KB</span>
+            </div>
+            <div class="metric-item">
+              <span class="lbl">缓存页</span>
+              <span class="val" id="metric-cached-pages">0 / 10</span>
+            </div>
+            <div class="metric-item">
+              <span class="lbl">脏页刷盘</span>
+              <span class="val" id="metric-dirty-pages">0 页</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 右侧：多 Tab 工作区 (Tabbed Workspace) -->
+      <main id="workspace">
+        <!-- 标签页栏 -->
+        <div id="tab-bar">
+          <div class="tabs-scroll-area" id="tabs-container">
+            <!-- 动态 Tab 标签 -->
+          </div>
+          <button class="btn-add-tab" id="btn-tab-plus" title="新建查询">+</button>
+        </div>
+
+        <!-- 标签页对应的面板展示区 -->
+        <div id="tab-content-viewport">
+          <!-- 动态渲染激活的 Tab 内容 (查询视图、表数据视图、表结构视图) -->
+        </div>
+      </main>
+    </div>
+
+    <!-- 底部状态栏 -->
+    <footer id="app-footer">
+      <div class="footer-item">
+        <span class="status-indicator"></span>
+        <span id="footer-conn-info">Connected to Local Native Engine (data/datasphere.db)</span>
+      </div>
+      <div class="footer-item">
+        <span id="footer-exec-stats">就绪</span>
+      </div>
+      <div class="footer-item">
+        <span>支持类型: BIGINT, DOUBLE, DECIMAL, VARCHAR, DATE, DATETIME, BOOL, TEXT</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

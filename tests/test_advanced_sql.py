@@ -252,5 +252,30 @@ class TestAdvancedSQL(unittest.TestCase):
         self.assertEqual(sorted([r['id'] for r in res_remain.data]), [2, 3])
 
 
+    def test_unicode_aliases_and_comments(self):
+        self.db.execute("CREATE TABLE emps (emp_id INT, name VARCHAR(50), salary DOUBLE, PRIMARY KEY (emp_id));")
+        self.db.execute("CREATE TABLE depts (dept_id INT, dept_name VARCHAR(50), PRIMARY KEY (dept_id));")
+        self.db.execute("INSERT INTO emps (emp_id, name, salary) VALUES (1, 'Alice', 25000.0);")
+        self.db.execute("INSERT INTO depts (dept_id, dept_name) VALUES (1, 'R&D');")
+
+        sql = """-- 1. 多表连接与条件查询 (JOIN & WHERE)
+SELECT 
+    e.emp_id,
+    e.name AS 姓名,
+    d.dept_name AS 部门,
+    e.salary AS 薪资
+FROM emps AS e
+LEFT JOIN depts AS d ON 1=1
+WHERE e.salary >= 20000.00
+ORDER BY e.salary DESC;"""
+        res = self.db.execute(sql)
+        self.assertTrue(res.success, f"Failed: {res.error}")
+        self.assertEqual(len(res.data), 1)
+        r0 = res.data[0]
+        self.assertEqual(r0.get('姓名'), 'Alice')
+        self.assertEqual(r0.get('部门'), 'R&D')
+        self.assertEqual(r0.get('薪资'), 25000.0)
+
+
 if __name__ == '__main__':
     unittest.main()

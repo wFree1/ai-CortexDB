@@ -1,0 +1,23 @@
+{
+  "departments": {
+    "dept_id": 5
+  },
+  "employees": {
+    "emp_id": 7
+  },
+  "products": {
+    "prod_id": 9
+  },
+  "orders": {
+    "order_id": 11
+  },
+  "student": {
+    "id": 25
+  },
+  "class": {
+    "sid": 19
+  },
+  "dept": {
+    "id": 21
+  }
+}

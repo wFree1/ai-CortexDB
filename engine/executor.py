@@ -249,6 +249,19 @@ def _evaluate_string_condition(row: Dict[str, Any], cond_str: str) -> bool:
         op = m.group(2).strip()
         right_str = m.group(3).strip()
         val = _resolve_col_from_row_fast(row, col_name)
+        if val is None:
+            c_raw = col_name.strip("'\"")
+            if (col_name.startswith("'") and col_name.endswith("'")) or (col_name.startswith('"') and col_name.endswith('"')):
+                val = c_raw
+            elif c_raw.upper() == "TRUE":
+                val = True
+            elif c_raw.upper() == "FALSE":
+                val = False
+            else:
+                try:
+                    val = float(c_raw) if "." in c_raw else int(c_raw)
+                except Exception:
+                    pass
         res = _eval_single_predicate(val, op, right_str, row)
 
     if has_not:
@@ -1149,10 +1162,10 @@ class Executor:
 
     def _parse_select_column_item(self, item: str) -> Tuple[str, Optional[str]]:
         s = item.strip()
-        parts = s.split()
-        if len(parts) >= 3 and parts[-2].upper() == "AS":
-            alias = parts[-1]
-            expr = " ".join(parts[:-2])
+        m = re.match(r"^(.*?)\s+AS\s+(.+)$", s, re.I)
+        if m:
+            expr = m.group(1).strip()
+            alias = m.group(2).strip().strip("'\"`")
             return expr, alias
         return s, None
 

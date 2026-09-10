@@ -860,9 +860,12 @@ class Parser:
                 up = self.current_token().value.upper()
                 if up == "AS":
                     self.consume("AS")
+                    tok = self.current_token()
+                    if tok and (tok.type in ("IDENTIFIER", "STRING") or getattr(tok, "type_code", 0) in (2, 3)):
+                        return str(self.consume().value)
                     return str(self.consume("IDENTIFIER").value)
-                if getattr(self.current_token(), "type", "") == "IDENTIFIER" and up not in ("FROM", "WHERE", "GROUP", "ORDER", "JOIN", "LIMIT"):
-                    return str(self.consume("IDENTIFIER").value)
+                if getattr(self.current_token(), "type", "") in ("IDENTIFIER", "STRING") and up not in ("FROM", "WHERE", "GROUP", "ORDER", "JOIN", "LEFT", "RIGHT", "INNER", "CROSS", "LIMIT", ";"):
+                    return str(self.consume().value)
             return None
 
         AGG_AND_SCALAR = {
@@ -916,7 +919,10 @@ class Parser:
         tbl_tok = self.consume("IDENTIFIER")
         table_name = str(tbl_tok.value).strip()
         table_alias = None
-        if self.current_token() and getattr(self.current_token(), "type", "").upper() == "IDENTIFIER":
+        if self.current_token() and str(self.current_token().value).upper() == "AS":
+            self.consume("AS")
+            table_alias = str(self.consume("IDENTIFIER").value).strip()
+        elif self.current_token() and getattr(self.current_token(), "type", "").upper() == "IDENTIFIER":
             nxt = str(self.current_token().value).upper()
             if nxt not in ("JOIN", "LEFT", "RIGHT", "INNER", "CROSS", "WHERE", "GROUP", "ORDER", "LIMIT", ";"):
                 table_alias = str(self.consume("IDENTIFIER").value).strip()
@@ -936,7 +942,10 @@ class Parser:
             right_tbl_tok = self.consume("IDENTIFIER")
             right_tbl = str(right_tbl_tok.value).strip()
             right_alias = None
-            if self.current_token() and getattr(self.current_token(), "type", "").upper() == "IDENTIFIER":
+            if self.current_token() and str(self.current_token().value).upper() == "AS":
+                self.consume("AS")
+                right_alias = str(self.consume("IDENTIFIER").value).strip()
+            elif self.current_token() and getattr(self.current_token(), "type", "").upper() == "IDENTIFIER":
                 nxt = str(self.current_token().value).upper()
                 if nxt not in ("ON", "JOIN", "LEFT", "RIGHT", "INNER", "CROSS", "WHERE", "GROUP", "ORDER", "LIMIT", ";"):
                     right_alias = str(self.consume("IDENTIFIER").value).strip()
@@ -1035,7 +1044,7 @@ class Parser:
             return parse_column_ref()
 
         def parse_predicate() -> str:
-            left = parse_column_ref()
+            left = parse_value_sql()
             t = self.current_token()
             if not t:
                 return left

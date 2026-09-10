@@ -1,0 +1,27 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environments
+.env
+venv/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+
+# Temporary test directories
+test_tmp*/
+test_adv_db*/
+test_rich_db*/
+test_bplus_db*/
+test_db*/
+test_debug*/
+
+# Logs
+log/*.txt
+
+# OS files
+.DS_Store
+Thumbs.db

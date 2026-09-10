@@ -104,11 +104,14 @@ class Lexer:
             # 空白
             ('WHITESPACE', r'\s+'),
 
-            # -- 单行注释（可选）：以 -- 开头到行尾
-            ('COMMENT', r'--[^\n]*'),
+            # -- 单行注释 或 /* ... */ 多行注释
+            ('COMMENT', r'--[^\n]*|/\*[\s\S]*?\*/'),
 
-            # 标识符（后续判断是否关键字）
-            ('IDENTIFIER', r'[A-Za-z_][A-Za-z0-9_]*'),
+            # 反引号或双引号标识符（支持如 `姓名` 或 "姓名" 或 `order`）
+            ('QUOTED_ID', r'`[^`]+`|"[^"]+"'),
+
+            # 标识符（支持英文、下划线、Unicode/汉字，首字符非数字）
+            ('IDENTIFIER', r'[^\W\d]\w*'),
 
             # 数字（可选符号，浮点在前，避免 123.45 被拆成 123 和 .45）
             ('NUMBER', r'[-+]?(?:\d+\.\d+|\d+)'),
@@ -142,7 +145,11 @@ class Lexer:
             if kind in ('WHITESPACE', 'COMMENT'):
                 continue
 
-            if kind == 'IDENTIFIER':
+            if kind == 'QUOTED_ID':
+                val = lexeme[1:-1]
+                token = Token('IDENTIFIER', val, line, column)
+
+            elif kind == 'IDENTIFIER':
                 up = lexeme.upper()
                 if up in self.KEYWORDS:
                     token = Token('KEYWORD', up, line, column)

@@ -1,0 +1,220 @@
+{
+  "departments": {
+    "table_id": 100,
+    "root_page": -1,
+    "primary_key": "dept_id",
+    "row_count": 4,
+    "columns": [
+      {
+        "name": "dept_id",
+        "type": "INT"
+      },
+      {
+        "name": "dept_name",
+        "type": "VARCHAR(50)"
+      },
+      {
+        "name": "budget",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "location",
+        "type": "VARCHAR(50)"
+      }
+    ],
+    "constraints": [
+      [
+        "PRIMARY_KEY",
+        "dept_id",
+        "",
+        ""
+      ]
+    ]
+  },
+  "employees": {
+    "table_id": 101,
+    "root_page": -1,
+    "primary_key": "emp_id",
+    "row_count": 5,
+    "columns": [
+      {
+        "name": "emp_id",
+        "type": "BIGINT"
+      },
+      {
+        "name": "name",
+        "type": "VARCHAR(50)"
+      },
+      {
+        "name": "dept_id",
+        "type": "INT"
+      },
+      {
+        "name": "salary",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "is_active",
+        "type": "BOOL"
+      },
+      {
+        "name": "hire_date",
+        "type": "DATE"
+      },
+      {
+        "name": "created_at",
+        "type": "DATETIME"
+      }
+    ],
+    "constraints": [
+      [
+        "PRIMARY_KEY",
+        "emp_id",
+        "",
+        ""
+      ]
+    ]
+  },
+  "products": {
+    "table_id": 102,
+    "root_page": -1,
+    "primary_key": "prod_id",
+    "row_count": 3,
+    "columns": [
+      {
+        "name": "prod_id",
+        "type": "INT"
+      },
+      {
+        "name": "title",
+        "type": "VARCHAR(100)"
+      },
+      {
+        "name": "price",
+        "type": "DECIMAL"
+      },
+      {
+        "name": "stock",
+        "type": "SMALLINT"
+      },
+      {
+        "name": "description",
+        "type": "TEXT"
+      }
+    ],
+    "constraints": [
+      [
+        "PRIMARY_KEY",
+        "prod_id",
+        "",
+        ""
+      ]
+    ]
+  },
+  "orders": {
+    "table_id": 103,
+    "root_page": -1,
+    "primary_key": "order_id",
+    "row_count": 3,
+    "columns": [
+      {
+        "name": "order_id",
+        "type": "BIGINT"
+      },
+      {
+        "name": "emp_id",
+        "type": "BIGINT"
+      },
+      {
+        "name": "total_amount",
+        "type": "DOUBLE"
+      },
+      {
+        "name": "order_date",
+        "type": "DATE"
+      },
+      {
+        "name": "status",
+        "type": "VARCHAR(20)"
+      }
+    ],
+    "constraints": [
+      [
+        "PRIMARY_KEY",
+        "order_id",
+        "",
+        ""
+      ]
+    ]
+  },
+  "student": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "INT"
+      },
+      {
+        "name": "name",
+        "type": "VARCHAR(20)"
+      },
+      {
+        "name": "age",
+        "type": "INT"
+      }
+    ],
+    "primary_key": "id",
+    "row_count": 2,
+    "constraints": [
+      [
+        "PRIMARY_KEY",
+        "id",
+        "",
+        ""
+      ]
+    ]
+  },
+  "class": {
+    "columns": [
+      {
+        "name": "sid",
+        "type": "INT"
+      },
+      {
+        "name": "name",
+        "type": "VARCHAR"
+      }
+    ],
+    "primary_key": "sid",
+    "row_count": 3,
+    "constraints": [
+      [
+        "PRIMARY_KEY",
+        "sid",
+        "",
+        ""
+      ]
+    ]
+  },
+  "dept": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "INT"
+      },
+      {
+        "name": "dname",
+        "type": "VARCHAR(8)"
+      }
+    ],
+    "primary_key": "id",
+    "row_count": 0,
+    "constraints": [
+      [
+        "PRIMARY_KEY",
+        "id",
+        "",
+        ""
+      ]
+    ]
+  }
+}

@@ -24,32 +24,38 @@ from utils.exceptions import (
 
 
 def clean_statement_for_lex(statement: str) -> str:
-    """清理 SQL 注释（-- 单行注释与 /* */ 多行注释），保留字符串内部内容"""
-    clean, in_string, i = "", False, 0
-    while i < len(statement):
+    """清理 SQL 注释（-- 单行注释与 /* */ 多行注释），将注释内容替换为空格以保持严格的行列号对齐"""
+    res = list(statement)
+    in_string, i = False, 0
+    n = len(statement)
+    while i < n:
         ch = statement[i]
         if ch == "'" and (i == 0 or statement[i - 1] != '\\'):
             in_string = not in_string
-            clean += ch
             i += 1
             continue
-        if not in_string and ch == '-' and i + 1 < len(statement) and statement[i + 1] == '-':
-            while i < len(statement) and statement[i] != '\n':
-                i += 1
-            continue
-        if not in_string and ch == '/' and i + 1 < len(statement) and statement[i + 1] == '*':
-            j = i + 2
-            while j < len(statement) - 1:
-                if statement[j] == '*' and statement[j + 1] == '/':
-                    i = j + 2
-                    break
-                j += 1
-            if j >= len(statement) - 1:
-                i = j
-            continue
-        clean += ch
+        if not in_string:
+            if ch == '-' and i + 1 < n and statement[i + 1] == '-':
+                while i < n and statement[i] != '\n':
+                    res[i] = ' '
+                    i += 1
+                continue
+            if ch == '/' and i + 1 < n and statement[i + 1] == '*':
+                res[i] = ' '
+                res[i + 1] = ' '
+                i += 2
+                while i < n - 1 and not (statement[i] == '*' and statement[i + 1] == '/'):
+                    if statement[i] != '\n':
+                        res[i] = ' '
+                    i += 1
+                if i < n:
+                    res[i] = ' '
+                if i + 1 < n:
+                    res[i + 1] = ' '
+                i += 2
+                continue
         i += 1
-    return clean.strip()
+    return "".join(res)
 
 
 def extract_smart_hints(msg: str) -> List[str]:
