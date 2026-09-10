@@ -1,0 +1,156 @@
+=== 详细编译日志（本次会话） ===
+
+>>> 处理第 1 条 SQL 语句 <<<
+SQL 语句: -- 建表测试
+CREATE TABLE student(
+  id   INT PRIMARY KEY,
+  name VARCHAR(20),
+  age  INT
+);
+[语义正确] 创建表 student 可行
+
+>>> 处理第 2 条 SQL 语句 <<<
+SQL 语句: CREATE TABLE class(
+  sid  INT,
+  name VARCHAR,
+  PRIMARY KEY(sid)
+);
+[语义正确] 创建表 class 可行
+
+>>> 处理第 3 条 SQL 语句 <<<
+SQL 语句: CREATE TABLE dept(
+  id     INT PRIMARY KEY,
+  dname  VARCHAR(8)
+);
+[语义正确] 创建表 dept 可行
+
+>>> 处理第 4 条 SQL 语句 <<<
+SQL 语句: -- 插入测试
+INSERT INTO student(id, name, age) VALUES (1, 'Alice', 20);
+[语义正确] 插入 1 行到 student
+
+>>> 处理第 5 条 SQL 语句 <<<
+SQL 语句: INSERT INTO student(id, name, age) VALUES (2, 'Bob',   21);
+[语义正确] 插入 1 行到 student
+
+>>> 处理第 6 条 SQL 语句 <<<
+SQL 语句: INSERT INTO student(id, name, age) VALUES (3, 'Cindy', 20);
+[语义正确] 插入 1 行到 student
+
+>>> 处理第 7 条 SQL 语句 <<<
+SQL 语句: INSERT INTO class(sid, name) VALUES (1, 'CS101');
+[语义正确] 插入 1 行到 class
+
+>>> 处理第 8 条 SQL 语句 <<<
+SQL 语句: INSERT INTO class(sid, name) VALUES (2, 'CS102');
+[语义正确] 插入 1 行到 class
+
+>>> 处理第 9 条 SQL 语句 <<<
+SQL 语句: INSERT INTO class(sid, name) VALUES (3, 'CS101');
+[语义正确] 插入 1 行到 class
+
+>>> 处理第 10 条 SQL 语句 <<<
+SQL 语句: -- 查询测试
+SELECT id, name FROM student WHERE age > 18 ORDER BY name;
+[语义正确] 查询表 student
+逻辑执行计划（优化前）:
+Select: id, name  [Filter: age > 18]  [OrderBy: name]
+  SeqScan(student)
+
+逻辑执行计划（谓词下推后）:
+Select: id, name  [Filter: age > 18]  [OrderBy: name]
+  SeqScan(student, cond={'left': {'type': 'column', 'value': 'age'}, 'operator': '>', 'right': {'type': 'constant', 'value_type': 'int', 'value': 18}})
+
+>>> 处理第 11 条 SQL 语句 <<<
+SQL 语句: -- 删除测试
+DELETE FROM student WHERE id = 1;
+[语义正确] 删除表 student 的数据
+
+>>> 处理第 12 条 SQL 语句 <<<
+SQL 语句: -- 更新测试
+UPDATE student SET age = 21, name = 'Bob' WHERE id = 3;
+[语义正确] 更新表 student
+
+>>> 处理第 13 条 SQL 语句 <<<
+SQL 语句: -- JOIN 测试
+SELECT s.id, s.name FROM student s JOIN class c ON s.id = c.sid;
+[语义正确] 查询表 student
+逻辑执行计划（优化前）:
+Select: s.id, s.name
+  Join(cond={'left': {'type': 'column', 'value': 's.id'}, 'operator': '=', 'right': {'type': 'column', 'value': 'c.sid'}})
+    SeqScan(student)
+    SeqScan(class)
+
+逻辑执行计划（谓词下推后）:
+Select: s.id, s.name
+  Join(cond={'left': {'type': 'column', 'value': 's.id'}, 'operator': '=', 'right': {'type': 'column', 'value': 'c.sid'}})
+    SeqScan(student)
+    SeqScan(class)
+
+>>> 处理第 14 条 SQL 语句 <<<
+SQL 语句: -- GROUP BY 测试
+SELECT age FROM student GROUP BY age;
+[语义正确] 查询表 student
+逻辑执行计划（优化前）:
+Select: age  [GroupBy: age]
+  SeqScan(student)
+
+逻辑执行计划（谓词下推后）:
+Select: age  [GroupBy: age]
+  SeqScan(student)
+
+>>> 处理第 15 条 SQL 语句 <<<
+SQL 语句: SELECT s.age FROM student s JOIN class c ON s.id = c.sid GROUP BY age;
+[语义正确] 查询表 student
+逻辑执行计划（优化前）:
+Select: s.age  [GroupBy: age]
+  Join(cond={'left': {'type': 'column', 'value': 's.id'}, 'operator': '=', 'right': {'type': 'column', 'value': 'c.sid'}})
+    SeqScan(student)
+    SeqScan(class)
+
+逻辑执行计划（谓词下推后）:
+Select: s.age  [GroupBy: age]
+  Join(cond={'left': {'type': 'column', 'value': 's.id'}, 'operator': '=', 'right': {'type': 'column', 'value': 'c.sid'}})
+    SeqScan(student)
+    SeqScan(class)
+
+>>> 处理第 16 条 SQL 语句 <<<
+SQL 语句: -- ORDER BY 测试
+SELECT id, name FROM student ORDER BY name ASC;
+[语义正确] 查询表 student
+逻辑执行计划（优化前）:
+Select: id, name  [OrderBy: name ASC]
+  SeqScan(student)
+
+逻辑执行计划（谓词下推后）:
+Select: id, name  [OrderBy: name ASC]
+  SeqScan(student)
+
+>>> 处理第 17 条 SQL 语句 <<<
+SQL 语句: SELECT id, age FROM student WHERE age > 18 ORDER BY age DESC;
+[语义正确] 查询表 student
+逻辑执行计划（优化前）:
+Select: id, age  [Filter: age > 18]  [OrderBy: age DESC]
+  SeqScan(student)
+
+逻辑执行计划（谓词下推后）:
+Select: id, age  [Filter: age > 18]  [OrderBy: age DESC]
+  SeqScan(student, cond={'left': {'type': 'column', 'value': 'age'}, 'operator': '>', 'right': {'type': 'constant', 'value_type': 'int', 'value': 18}})
+
+>>> 处理第 18 条 SQL 语句 <<<
+SQL 语句: -- 谓词下推测试
+SELECT s.id, s.name
+FROM student s JOIN class c ON s.id = c.sid
+WHERE s.age > 18 AND c.name = 'CS101';
+[语义正确] 查询表 student
+逻辑执行计划（优化前）:
+Select: s.id, s.name  [Filter: (s.age > 18 AND c.name = 'CS101')]
+  Join(cond={'left': {'type': 'column', 'value': 's.id'}, 'operator': '=', 'right': {'type': 'column', 'value': 'c.sid'}})
+    SeqScan(student)
+    SeqScan(class)
+
+逻辑执行计划（谓词下推后）:
+Select: s.id, s.name  [Filter: (s.age > 18 AND c.name = 'CS101')]
+  Join(cond={'left': {'type': 'column', 'value': 's.id'}, 'operator': '=', 'right': {'type': 'column', 'value': 'c.sid'}})
+    SeqScan(student, cond={'left': {'type': 'column', 'value': 's.age'}, 'operator': '>', 'right': {'type': 'constant', 'value_type': 'int', 'value': 18}})
+    SeqScan(class, cond={'left': {'type': 'column', 'value': 'c.name'}, 'operator': '=', 'right': {'type': 'constant', 'value_type': 'string', 'value': 'CS101'}})

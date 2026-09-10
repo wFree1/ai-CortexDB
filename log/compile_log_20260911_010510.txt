@@ -1,0 +1,1166 @@
+=== 详细编译日志（本次会话） ===
+
+>>> 处理第 1 条 SQL 语句 <<<
+SQL 语句: -- 建表测试
+CREATE TABLE student(
+  id   INT PRIMARY KEY,
+  name VARCHAR(20),
+  age  INT
+);
+[LL1 推导过程]
+栈: # CreateStmt                                                           输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: CreateStmt
+使用产生式: CreateStmt -> CREATE TABLE IDENTIFIER ( DefList ) ;
+栈: # ; ) DefList ( IDENTIFIER TABLE CREATE                                输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: CREATE
+栈: # ; ) DefList ( IDENTIFIER TABLE                                       输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: TABLE
+栈: # ; ) DefList ( IDENTIFIER                                             输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: IDENTIFIER
+栈: # ; ) DefList (                                                        输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: (
+栈: # ; ) DefList                                                          输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: DefList
+使用产生式: DefList -> Def DefTail
+栈: # ; ) DefTail Def                                                      输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: Def
+使用产生式: Def -> IDENTIFIER TypeWithOptParam ColConstraintOpt
+栈: # ; ) DefTail ColConstraintOpt TypeWithOptParam IDENTIFIER             输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: IDENTIFIER
+栈: # ; ) DefTail ColConstraintOpt TypeWithOptParam                        输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: TypeWithOptParam
+使用产生式: TypeWithOptParam -> INT
+栈: # ; ) DefTail ColConstraintOpt INT                                     输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: INT
+栈: # ; ) DefTail ColConstraintOpt                                         输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: ColConstraintOpt
+使用产生式: ColConstraintOpt -> PRIMARY KEY
+栈: # ; ) DefTail KEY PRIMARY                                              输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: PRIMARY
+栈: # ; ) DefTail KEY                                                      输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: KEY
+栈: # ; ) DefTail                                                          输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: DefTail
+使用产生式: DefTail -> , Def DefTail
+栈: # ; ) DefTail Def ,                                                    输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: ,
+栈: # ; ) DefTail Def                                                      输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: Def
+使用产生式: Def -> IDENTIFIER TypeWithOptParam ColConstraintOpt
+栈: # ; ) DefTail ColConstraintOpt TypeWithOptParam IDENTIFIER             输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: IDENTIFIER
+栈: # ; ) DefTail ColConstraintOpt TypeWithOptParam                        输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: TypeWithOptParam
+使用产生式: TypeWithOptParam -> VARCHAR VarcharParamOpt
+栈: # ; ) DefTail ColConstraintOpt VarcharParamOpt VARCHAR                 输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: VARCHAR
+栈: # ; ) DefTail ColConstraintOpt VarcharParamOpt                         输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: VarcharParamOpt
+使用产生式: VarcharParamOpt -> ( NUMBER )
+栈: # ; ) DefTail ColConstraintOpt ) NUMBER (                              输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: (
+栈: # ; ) DefTail ColConstraintOpt ) NUMBER                                输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: NUMBER
+栈: # ; ) DefTail ColConstraintOpt )                                       输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: )
+栈: # ; ) DefTail ColConstraintOpt                                         输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: ColConstraintOpt
+使用产生式: ColConstraintOpt -> ε
+栈: # ; ) DefTail                                                          输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: DefTail
+使用产生式: DefTail -> , Def DefTail
+栈: # ; ) DefTail Def ,                                                    输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: ,
+栈: # ; ) DefTail Def                                                      输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: Def
+使用产生式: Def -> IDENTIFIER TypeWithOptParam ColConstraintOpt
+栈: # ; ) DefTail ColConstraintOpt TypeWithOptParam IDENTIFIER             输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: IDENTIFIER
+栈: # ; ) DefTail ColConstraintOpt TypeWithOptParam                        输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: TypeWithOptParam
+使用产生式: TypeWithOptParam -> INT
+栈: # ; ) DefTail ColConstraintOpt INT                                     输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: INT
+栈: # ; ) DefTail ColConstraintOpt                                         输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: ColConstraintOpt
+使用产生式: ColConstraintOpt -> ε
+栈: # ; ) DefTail                                                          输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: DefTail
+使用产生式: DefTail -> ε
+栈: # ; )                                                                  输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: )
+栈: # ;                                                                    输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: ;
+栈: #                                                                      输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) , IDENTIFIER INT ) ; # # 处理: #
+[OK] 输入完整匹配，分析成功
+[语义错误] 表 'student' 已存在
+[语义错误] 表 'student' 已存在
+
+>>> 处理第 2 条 SQL 语句 <<<
+SQL 语句: CREATE TABLE class(
+  sid  INT,
+  name VARCHAR,
+  PRIMARY KEY(sid)
+);
+[LL1 推导过程]
+栈: # CreateStmt                                                           输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: CreateStmt
+使用产生式: CreateStmt -> CREATE TABLE IDENTIFIER ( DefList ) ;
+栈: # ; ) DefList ( IDENTIFIER TABLE CREATE                                输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: CREATE
+栈: # ; ) DefList ( IDENTIFIER TABLE                                       输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: TABLE
+栈: # ; ) DefList ( IDENTIFIER                                             输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: IDENTIFIER
+栈: # ; ) DefList (                                                        输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: (
+栈: # ; ) DefList                                                          输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: DefList
+使用产生式: DefList -> Def DefTail
+栈: # ; ) DefTail Def                                                      输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: Def
+使用产生式: Def -> IDENTIFIER TypeWithOptParam ColConstraintOpt
+栈: # ; ) DefTail ColConstraintOpt TypeWithOptParam IDENTIFIER             输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: IDENTIFIER
+栈: # ; ) DefTail ColConstraintOpt TypeWithOptParam                        输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: TypeWithOptParam
+使用产生式: TypeWithOptParam -> INT
+栈: # ; ) DefTail ColConstraintOpt INT                                     输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: INT
+栈: # ; ) DefTail ColConstraintOpt                                         输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: ColConstraintOpt
+使用产生式: ColConstraintOpt -> ε
+栈: # ; ) DefTail                                                          输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: DefTail
+使用产生式: DefTail -> , Def DefTail
+栈: # ; ) DefTail Def ,                                                    输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: ,
+栈: # ; ) DefTail Def                                                      输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: Def
+使用产生式: Def -> IDENTIFIER TypeWithOptParam ColConstraintOpt
+栈: # ; ) DefTail ColConstraintOpt TypeWithOptParam IDENTIFIER             输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: IDENTIFIER
+栈: # ; ) DefTail ColConstraintOpt TypeWithOptParam                        输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: TypeWithOptParam
+使用产生式: TypeWithOptParam -> VARCHAR VarcharParamOpt
+栈: # ; ) DefTail ColConstraintOpt VarcharParamOpt VARCHAR                 输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: VARCHAR
+栈: # ; ) DefTail ColConstraintOpt VarcharParamOpt                         输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: VarcharParamOpt
+使用产生式: VarcharParamOpt -> ε
+栈: # ; ) DefTail ColConstraintOpt                                         输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: ColConstraintOpt
+使用产生式: ColConstraintOpt -> ε
+栈: # ; ) DefTail                                                          输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: DefTail
+使用产生式: DefTail -> , Def DefTail
+栈: # ; ) DefTail Def ,                                                    输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: ,
+栈: # ; ) DefTail Def                                                      输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: Def
+使用产生式: Def -> PRIMARY KEY ( IDENTIFIER )
+栈: # ; ) DefTail ) IDENTIFIER ( KEY PRIMARY                               输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: PRIMARY
+栈: # ; ) DefTail ) IDENTIFIER ( KEY                                       输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: KEY
+栈: # ; ) DefTail ) IDENTIFIER (                                           输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: (
+栈: # ; ) DefTail ) IDENTIFIER                                             输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: IDENTIFIER
+栈: # ; ) DefTail )                                                        输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: )
+栈: # ; ) DefTail                                                          输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: DefTail
+使用产生式: DefTail -> ε
+栈: # ; )                                                                  输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: )
+栈: # ;                                                                    输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: ;
+栈: #                                                                      输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT , IDENTIFIER VARCHAR , PRIMARY KEY ( IDENTIFIER ) ) ; # # 处理: #
+[OK] 输入完整匹配，分析成功
+[语义错误] 表 'class' 已存在
+[语义错误] 表 'class' 已存在
+
+>>> 处理第 3 条 SQL 语句 <<<
+SQL 语句: CREATE TABLE dept(
+  id     INT PRIMARY KEY,
+  dname  VARCHAR(8)
+);
+[LL1 推导过程]
+栈: # CreateStmt                                                           输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: CreateStmt
+使用产生式: CreateStmt -> CREATE TABLE IDENTIFIER ( DefList ) ;
+栈: # ; ) DefList ( IDENTIFIER TABLE CREATE                                输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: CREATE
+栈: # ; ) DefList ( IDENTIFIER TABLE                                       输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: TABLE
+栈: # ; ) DefList ( IDENTIFIER                                             输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: IDENTIFIER
+栈: # ; ) DefList (                                                        输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: (
+栈: # ; ) DefList                                                          输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: DefList
+使用产生式: DefList -> Def DefTail
+栈: # ; ) DefTail Def                                                      输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: Def
+使用产生式: Def -> IDENTIFIER TypeWithOptParam ColConstraintOpt
+栈: # ; ) DefTail ColConstraintOpt TypeWithOptParam IDENTIFIER             输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: IDENTIFIER
+栈: # ; ) DefTail ColConstraintOpt TypeWithOptParam                        输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: TypeWithOptParam
+使用产生式: TypeWithOptParam -> INT
+栈: # ; ) DefTail ColConstraintOpt INT                                     输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: INT
+栈: # ; ) DefTail ColConstraintOpt                                         输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: ColConstraintOpt
+使用产生式: ColConstraintOpt -> PRIMARY KEY
+栈: # ; ) DefTail KEY PRIMARY                                              输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: PRIMARY
+栈: # ; ) DefTail KEY                                                      输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: KEY
+栈: # ; ) DefTail                                                          输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: DefTail
+使用产生式: DefTail -> , Def DefTail
+栈: # ; ) DefTail Def ,                                                    输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: ,
+栈: # ; ) DefTail Def                                                      输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: Def
+使用产生式: Def -> IDENTIFIER TypeWithOptParam ColConstraintOpt
+栈: # ; ) DefTail ColConstraintOpt TypeWithOptParam IDENTIFIER             输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: IDENTIFIER
+栈: # ; ) DefTail ColConstraintOpt TypeWithOptParam                        输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: TypeWithOptParam
+使用产生式: TypeWithOptParam -> VARCHAR VarcharParamOpt
+栈: # ; ) DefTail ColConstraintOpt VarcharParamOpt VARCHAR                 输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: VARCHAR
+栈: # ; ) DefTail ColConstraintOpt VarcharParamOpt                         输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: VarcharParamOpt
+使用产生式: VarcharParamOpt -> ( NUMBER )
+栈: # ; ) DefTail ColConstraintOpt ) NUMBER (                              输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: (
+栈: # ; ) DefTail ColConstraintOpt ) NUMBER                                输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: NUMBER
+栈: # ; ) DefTail ColConstraintOpt )                                       输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: )
+栈: # ; ) DefTail ColConstraintOpt                                         输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: ColConstraintOpt
+使用产生式: ColConstraintOpt -> ε
+栈: # ; ) DefTail                                                          输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: DefTail
+使用产生式: DefTail -> ε
+栈: # ; )                                                                  输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: )
+栈: # ;                                                                    输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: ;
+栈: #                                                                      输入: CREATE TABLE IDENTIFIER ( IDENTIFIER INT PRIMARY KEY , IDENTIFIER VARCHAR ( NUMBER ) ) ; # # 处理: #
+[OK] 输入完整匹配，分析成功
+[语义错误] 表 'dept' 已存在
+[语义错误] 表 'dept' 已存在
+
+>>> 处理第 4 条 SQL 语句 <<<
+SQL 语句: -- 插入测试
+INSERT INTO student(id, name, age) VALUES (1, 'Alice', 20);
+[LL1 推导过程]
+栈: # InsertStmt                                                           输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: InsertStmt
+使用产生式: InsertStmt -> INSERT INTO IDENTIFIER InsertCols VALUES ( ValueList ) InsertTail ;
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols IDENTIFIER INTO INSERT  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: INSERT
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols IDENTIFIER INTO         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: INTO
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols IDENTIFIER              输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: IDENTIFIER
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: InsertCols
+使用产生式: InsertCols -> ( ColumnList )
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnList (                     输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: (
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnList                       输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ColumnList
+使用产生式: ColumnList -> IDENTIFIER ColumnListTail
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER        输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: IDENTIFIER
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ColumnListTail
+使用产生式: ColumnListTail -> , IDENTIFIER ColumnListTail
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER ,      输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ,
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER        输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: IDENTIFIER
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ColumnListTail
+使用产生式: ColumnListTail -> , IDENTIFIER ColumnListTail
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER ,      输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ,
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER        输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: IDENTIFIER
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ColumnListTail
+使用产生式: ColumnListTail -> ε
+栈: # ; InsertTail ) ValueList ( VALUES )                                  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: )
+栈: # ; InsertTail ) ValueList ( VALUES                                    输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: VALUES
+栈: # ; InsertTail ) ValueList (                                           输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: (
+栈: # ; InsertTail ) ValueList                                             输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ValueList
+使用产生式: ValueList -> Value ValueListTail
+栈: # ; InsertTail ) ValueListTail Value                                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: Value
+使用产生式: Value -> NUMBER
+栈: # ; InsertTail ) ValueListTail NUMBER                                  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: NUMBER
+栈: # ; InsertTail ) ValueListTail                                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ValueListTail
+使用产生式: ValueListTail -> , Value ValueListTail
+栈: # ; InsertTail ) ValueListTail Value ,                                 输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ,
+栈: # ; InsertTail ) ValueListTail Value                                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: Value
+使用产生式: Value -> STRING
+栈: # ; InsertTail ) ValueListTail STRING                                  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: STRING
+栈: # ; InsertTail ) ValueListTail                                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ValueListTail
+使用产生式: ValueListTail -> , Value ValueListTail
+栈: # ; InsertTail ) ValueListTail Value ,                                 输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ,
+栈: # ; InsertTail ) ValueListTail Value                                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: Value
+使用产生式: Value -> NUMBER
+栈: # ; InsertTail ) ValueListTail NUMBER                                  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: NUMBER
+栈: # ; InsertTail ) ValueListTail                                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ValueListTail
+使用产生式: ValueListTail -> ε
+栈: # ; InsertTail )                                                       输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: )
+栈: # ; InsertTail                                                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: InsertTail
+使用产生式: InsertTail -> ε
+栈: # ;                                                                    输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ;
+栈: #                                                                      输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: #
+[OK] 输入完整匹配，分析成功
+[语义正确] 插入 1 行到 student
+
+>>> 处理第 5 条 SQL 语句 <<<
+SQL 语句: INSERT INTO student(id, name, age) VALUES (2, 'Bob',   21);
+[LL1 推导过程]
+栈: # InsertStmt                                                           输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: InsertStmt
+使用产生式: InsertStmt -> INSERT INTO IDENTIFIER InsertCols VALUES ( ValueList ) InsertTail ;
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols IDENTIFIER INTO INSERT  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: INSERT
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols IDENTIFIER INTO         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: INTO
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols IDENTIFIER              输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: IDENTIFIER
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: InsertCols
+使用产生式: InsertCols -> ( ColumnList )
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnList (                     输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: (
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnList                       输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ColumnList
+使用产生式: ColumnList -> IDENTIFIER ColumnListTail
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER        输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: IDENTIFIER
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ColumnListTail
+使用产生式: ColumnListTail -> , IDENTIFIER ColumnListTail
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER ,      输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ,
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER        输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: IDENTIFIER
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ColumnListTail
+使用产生式: ColumnListTail -> , IDENTIFIER ColumnListTail
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER ,      输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ,
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER        输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: IDENTIFIER
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ColumnListTail
+使用产生式: ColumnListTail -> ε
+栈: # ; InsertTail ) ValueList ( VALUES )                                  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: )
+栈: # ; InsertTail ) ValueList ( VALUES                                    输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: VALUES
+栈: # ; InsertTail ) ValueList (                                           输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: (
+栈: # ; InsertTail ) ValueList                                             输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ValueList
+使用产生式: ValueList -> Value ValueListTail
+栈: # ; InsertTail ) ValueListTail Value                                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: Value
+使用产生式: Value -> NUMBER
+栈: # ; InsertTail ) ValueListTail NUMBER                                  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: NUMBER
+栈: # ; InsertTail ) ValueListTail                                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ValueListTail
+使用产生式: ValueListTail -> , Value ValueListTail
+栈: # ; InsertTail ) ValueListTail Value ,                                 输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ,
+栈: # ; InsertTail ) ValueListTail Value                                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: Value
+使用产生式: Value -> STRING
+栈: # ; InsertTail ) ValueListTail STRING                                  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: STRING
+栈: # ; InsertTail ) ValueListTail                                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ValueListTail
+使用产生式: ValueListTail -> , Value ValueListTail
+栈: # ; InsertTail ) ValueListTail Value ,                                 输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ,
+栈: # ; InsertTail ) ValueListTail Value                                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: Value
+使用产生式: Value -> NUMBER
+栈: # ; InsertTail ) ValueListTail NUMBER                                  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: NUMBER
+栈: # ; InsertTail ) ValueListTail                                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ValueListTail
+使用产生式: ValueListTail -> ε
+栈: # ; InsertTail )                                                       输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: )
+栈: # ; InsertTail                                                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: InsertTail
+使用产生式: InsertTail -> ε
+栈: # ;                                                                    输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ;
+栈: #                                                                      输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: #
+[OK] 输入完整匹配，分析成功
+[语义正确] 插入 1 行到 student
+Primary key violation: 'id'=2 already exists in 'student'
+Primary key violation: 'id'=2 already exists in 'student'
+
+>>> 处理第 6 条 SQL 语句 <<<
+SQL 语句: INSERT INTO student(id, name, age) VALUES (3, 'Cindy', 20);
+[LL1 推导过程]
+栈: # InsertStmt                                                           输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: InsertStmt
+使用产生式: InsertStmt -> INSERT INTO IDENTIFIER InsertCols VALUES ( ValueList ) InsertTail ;
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols IDENTIFIER INTO INSERT  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: INSERT
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols IDENTIFIER INTO         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: INTO
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols IDENTIFIER              输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: IDENTIFIER
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: InsertCols
+使用产生式: InsertCols -> ( ColumnList )
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnList (                     输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: (
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnList                       输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ColumnList
+使用产生式: ColumnList -> IDENTIFIER ColumnListTail
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER        输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: IDENTIFIER
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ColumnListTail
+使用产生式: ColumnListTail -> , IDENTIFIER ColumnListTail
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER ,      输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ,
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER        输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: IDENTIFIER
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ColumnListTail
+使用产生式: ColumnListTail -> , IDENTIFIER ColumnListTail
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER ,      输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ,
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER        输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: IDENTIFIER
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ColumnListTail
+使用产生式: ColumnListTail -> ε
+栈: # ; InsertTail ) ValueList ( VALUES )                                  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: )
+栈: # ; InsertTail ) ValueList ( VALUES                                    输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: VALUES
+栈: # ; InsertTail ) ValueList (                                           输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: (
+栈: # ; InsertTail ) ValueList                                             输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ValueList
+使用产生式: ValueList -> Value ValueListTail
+栈: # ; InsertTail ) ValueListTail Value                                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: Value
+使用产生式: Value -> NUMBER
+栈: # ; InsertTail ) ValueListTail NUMBER                                  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: NUMBER
+栈: # ; InsertTail ) ValueListTail                                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ValueListTail
+使用产生式: ValueListTail -> , Value ValueListTail
+栈: # ; InsertTail ) ValueListTail Value ,                                 输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ,
+栈: # ; InsertTail ) ValueListTail Value                                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: Value
+使用产生式: Value -> STRING
+栈: # ; InsertTail ) ValueListTail STRING                                  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: STRING
+栈: # ; InsertTail ) ValueListTail                                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ValueListTail
+使用产生式: ValueListTail -> , Value ValueListTail
+栈: # ; InsertTail ) ValueListTail Value ,                                 输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ,
+栈: # ; InsertTail ) ValueListTail Value                                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: Value
+使用产生式: Value -> NUMBER
+栈: # ; InsertTail ) ValueListTail NUMBER                                  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: NUMBER
+栈: # ; InsertTail ) ValueListTail                                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ValueListTail
+使用产生式: ValueListTail -> ε
+栈: # ; InsertTail )                                                       输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: )
+栈: # ; InsertTail                                                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: InsertTail
+使用产生式: InsertTail -> ε
+栈: # ;                                                                    输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: ;
+栈: #                                                                      输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING , NUMBER ) ; # # 处理: #
+[OK] 输入完整匹配，分析成功
+[语义正确] 插入 1 行到 student
+Primary key violation: 'id'=3 already exists in 'student'
+Primary key violation: 'id'=3 already exists in 'student'
+
+>>> 处理第 7 条 SQL 语句 <<<
+SQL 语句: INSERT INTO class(sid, name) VALUES (1, 'CS101');
+[LL1 推导过程]
+栈: # InsertStmt                                                           输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: InsertStmt
+使用产生式: InsertStmt -> INSERT INTO IDENTIFIER InsertCols VALUES ( ValueList ) InsertTail ;
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols IDENTIFIER INTO INSERT  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: INSERT
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols IDENTIFIER INTO         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: INTO
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols IDENTIFIER              输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: IDENTIFIER
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: InsertCols
+使用产生式: InsertCols -> ( ColumnList )
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnList (                     输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: (
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnList                       输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ColumnList
+使用产生式: ColumnList -> IDENTIFIER ColumnListTail
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER        输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: IDENTIFIER
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ColumnListTail
+使用产生式: ColumnListTail -> , IDENTIFIER ColumnListTail
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER ,      输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ,
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER        输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: IDENTIFIER
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ColumnListTail
+使用产生式: ColumnListTail -> ε
+栈: # ; InsertTail ) ValueList ( VALUES )                                  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: )
+栈: # ; InsertTail ) ValueList ( VALUES                                    输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: VALUES
+栈: # ; InsertTail ) ValueList (                                           输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: (
+栈: # ; InsertTail ) ValueList                                             输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ValueList
+使用产生式: ValueList -> Value ValueListTail
+栈: # ; InsertTail ) ValueListTail Value                                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: Value
+使用产生式: Value -> NUMBER
+栈: # ; InsertTail ) ValueListTail NUMBER                                  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: NUMBER
+栈: # ; InsertTail ) ValueListTail                                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ValueListTail
+使用产生式: ValueListTail -> , Value ValueListTail
+栈: # ; InsertTail ) ValueListTail Value ,                                 输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ,
+栈: # ; InsertTail ) ValueListTail Value                                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: Value
+使用产生式: Value -> STRING
+栈: # ; InsertTail ) ValueListTail STRING                                  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: STRING
+栈: # ; InsertTail ) ValueListTail                                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ValueListTail
+使用产生式: ValueListTail -> ε
+栈: # ; InsertTail )                                                       输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: )
+栈: # ; InsertTail                                                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: InsertTail
+使用产生式: InsertTail -> ε
+栈: # ;                                                                    输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ;
+栈: #                                                                      输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: #
+[OK] 输入完整匹配，分析成功
+[语义正确] 插入 1 行到 class
+Primary key violation: 'sid'=1 already exists in 'class'
+Primary key violation: 'sid'=1 already exists in 'class'
+
+>>> 处理第 8 条 SQL 语句 <<<
+SQL 语句: INSERT INTO class(sid, name) VALUES (2, 'CS102');
+[LL1 推导过程]
+栈: # InsertStmt                                                           输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: InsertStmt
+使用产生式: InsertStmt -> INSERT INTO IDENTIFIER InsertCols VALUES ( ValueList ) InsertTail ;
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols IDENTIFIER INTO INSERT  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: INSERT
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols IDENTIFIER INTO         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: INTO
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols IDENTIFIER              输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: IDENTIFIER
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: InsertCols
+使用产生式: InsertCols -> ( ColumnList )
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnList (                     输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: (
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnList                       输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ColumnList
+使用产生式: ColumnList -> IDENTIFIER ColumnListTail
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER        输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: IDENTIFIER
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ColumnListTail
+使用产生式: ColumnListTail -> , IDENTIFIER ColumnListTail
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER ,      输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ,
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER        输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: IDENTIFIER
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ColumnListTail
+使用产生式: ColumnListTail -> ε
+栈: # ; InsertTail ) ValueList ( VALUES )                                  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: )
+栈: # ; InsertTail ) ValueList ( VALUES                                    输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: VALUES
+栈: # ; InsertTail ) ValueList (                                           输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: (
+栈: # ; InsertTail ) ValueList                                             输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ValueList
+使用产生式: ValueList -> Value ValueListTail
+栈: # ; InsertTail ) ValueListTail Value                                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: Value
+使用产生式: Value -> NUMBER
+栈: # ; InsertTail ) ValueListTail NUMBER                                  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: NUMBER
+栈: # ; InsertTail ) ValueListTail                                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ValueListTail
+使用产生式: ValueListTail -> , Value ValueListTail
+栈: # ; InsertTail ) ValueListTail Value ,                                 输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ,
+栈: # ; InsertTail ) ValueListTail Value                                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: Value
+使用产生式: Value -> STRING
+栈: # ; InsertTail ) ValueListTail STRING                                  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: STRING
+栈: # ; InsertTail ) ValueListTail                                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ValueListTail
+使用产生式: ValueListTail -> ε
+栈: # ; InsertTail )                                                       输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: )
+栈: # ; InsertTail                                                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: InsertTail
+使用产生式: InsertTail -> ε
+栈: # ;                                                                    输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ;
+栈: #                                                                      输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: #
+[OK] 输入完整匹配，分析成功
+[语义正确] 插入 1 行到 class
+Primary key violation: 'sid'=2 already exists in 'class'
+Primary key violation: 'sid'=2 already exists in 'class'
+
+>>> 处理第 9 条 SQL 语句 <<<
+SQL 语句: INSERT INTO class(sid, name) VALUES (3, 'CS101');
+[LL1 推导过程]
+栈: # InsertStmt                                                           输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: InsertStmt
+使用产生式: InsertStmt -> INSERT INTO IDENTIFIER InsertCols VALUES ( ValueList ) InsertTail ;
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols IDENTIFIER INTO INSERT  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: INSERT
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols IDENTIFIER INTO         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: INTO
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols IDENTIFIER              输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: IDENTIFIER
+栈: # ; InsertTail ) ValueList ( VALUES InsertCols                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: InsertCols
+使用产生式: InsertCols -> ( ColumnList )
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnList (                     输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: (
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnList                       输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ColumnList
+使用产生式: ColumnList -> IDENTIFIER ColumnListTail
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER        输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: IDENTIFIER
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ColumnListTail
+使用产生式: ColumnListTail -> , IDENTIFIER ColumnListTail
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER ,      输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ,
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail IDENTIFIER        输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: IDENTIFIER
+栈: # ; InsertTail ) ValueList ( VALUES ) ColumnListTail                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ColumnListTail
+使用产生式: ColumnListTail -> ε
+栈: # ; InsertTail ) ValueList ( VALUES )                                  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: )
+栈: # ; InsertTail ) ValueList ( VALUES                                    输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: VALUES
+栈: # ; InsertTail ) ValueList (                                           输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: (
+栈: # ; InsertTail ) ValueList                                             输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ValueList
+使用产生式: ValueList -> Value ValueListTail
+栈: # ; InsertTail ) ValueListTail Value                                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: Value
+使用产生式: Value -> NUMBER
+栈: # ; InsertTail ) ValueListTail NUMBER                                  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: NUMBER
+栈: # ; InsertTail ) ValueListTail                                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ValueListTail
+使用产生式: ValueListTail -> , Value ValueListTail
+栈: # ; InsertTail ) ValueListTail Value ,                                 输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ,
+栈: # ; InsertTail ) ValueListTail Value                                   输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: Value
+使用产生式: Value -> STRING
+栈: # ; InsertTail ) ValueListTail STRING                                  输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: STRING
+栈: # ; InsertTail ) ValueListTail                                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ValueListTail
+使用产生式: ValueListTail -> ε
+栈: # ; InsertTail )                                                       输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: )
+栈: # ; InsertTail                                                         输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: InsertTail
+使用产生式: InsertTail -> ε
+栈: # ;                                                                    输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: ;
+栈: #                                                                      输入: INSERT INTO IDENTIFIER ( IDENTIFIER , IDENTIFIER ) VALUES ( NUMBER , STRING ) ; # # 处理: #
+[OK] 输入完整匹配，分析成功
+[语义正确] 插入 1 行到 class
+Primary key violation: 'sid'=3 already exists in 'class'
+Primary key violation: 'sid'=3 already exists in 'class'
+
+>>> 处理第 10 条 SQL 语句 <<<
+SQL 语句: -- 查询测试
+SELECT id, name FROM student WHERE age > 18 ORDER BY name;
+[LL1 推导过程]
+栈: # SelectStmt                                                           输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: SelectStmt
+使用产生式: SelectStmt -> SELECT SelectList FROM TableRef JoinList WhereOpt GroupOpt OrderOpt ;
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectList SELECT 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: SELECT
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectList       输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: SelectList
+使用产生式: SelectList -> SelectItem SelectListTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail SelectItem 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: SelectItem
+使用产生式: SelectItem -> ColumnRef AliasOpt
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRef 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: AliasOpt
+使用产生式: AliasOpt -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail   输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: SelectListTail
+使用产生式: SelectListTail -> , SelectItem SelectListTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail SelectItem , 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: ,
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail SelectItem 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: SelectItem
+使用产生式: SelectItem -> ColumnRef AliasOpt
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRef 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: AliasOpt
+使用产生式: AliasOpt -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail   输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: SelectListTail
+使用产生式: SelectListTail -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM                  输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: FROM
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef                       输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: TableRef
+使用产生式: TableRef -> IDENTIFIER AliasOptSimple
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList AliasOptSimple IDENTIFIER      输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList AliasOptSimple                 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: AliasOptSimple
+使用产生式: AliasOptSimple -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList                                输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: JoinList
+使用产生式: JoinList -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt                                         输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: WhereOpt
+使用产生式: WhereOpt -> WHERE BoolExpr
+栈: # ; OrderOpt GroupOpt BoolExpr WHERE                                   输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: WHERE
+栈: # ; OrderOpt GroupOpt BoolExpr                                         输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: BoolExpr
+使用产生式: BoolExpr -> BoolTerm BoolExprTail
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTerm                            输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: BoolTerm
+使用产生式: BoolTerm -> BoolFactor BoolTermTail
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail BoolFactor             输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: BoolFactor
+使用产生式: BoolFactor -> Predicate
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Predicate              输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: Predicate
+使用产生式: Predicate -> ColumnRef OPERATOR Value
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value OPERATOR ColumnRef 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value OPERATOR ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value OPERATOR ColumnRefTail 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> ε
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value OPERATOR         输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: OPERATOR
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value                  输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: Value
+使用产生式: Value -> NUMBER
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail NUMBER                 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: NUMBER
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail                        输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: BoolTermTail
+使用产生式: BoolTermTail -> ε
+栈: # ; OrderOpt GroupOpt BoolExprTail                                     输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: BoolExprTail
+使用产生式: BoolExprTail -> ε
+栈: # ; OrderOpt GroupOpt                                                  输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: GroupOpt
+使用产生式: GroupOpt -> ε
+栈: # ; OrderOpt                                                           输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: OrderOpt
+使用产生式: OrderOpt -> ORDER BY IDENTIFIER OrderDir
+栈: # ; OrderDir IDENTIFIER BY ORDER                                       输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: ORDER
+栈: # ; OrderDir IDENTIFIER BY                                             输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: BY
+栈: # ; OrderDir IDENTIFIER                                                输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderDir                                                           输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: OrderDir
+使用产生式: OrderDir -> ε
+栈: # ;                                                                    输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: ;
+栈: #                                                                      输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER ; # # 处理: #
+[OK] 输入完整匹配，分析成功
+[语义正确] 查询表 student
+逻辑执行计划（优化前）:
+Select: id, name  [Filter: age > 18]  [OrderBy: name]
+  SeqScan(student)
+
+逻辑执行计划（谓词下推后）:
+Select: id, name  [OrderBy: name]
+  SeqScan(student, cond={'left': {'type': 'column', 'value': 'age'}, 'operator': '>', 'right': {'type': 'constant', 'value_type': 'int', 'value': 18}})
+
+>>> 处理第 11 条 SQL 语句 <<<
+SQL 语句: -- 删除测试
+DELETE FROM student WHERE id = 1;
+[LL1 推导过程]
+栈: # DeleteStmt                                                           输入: DELETE FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ; #            # 处理: DeleteStmt
+使用产生式: DeleteStmt -> DELETE FROM IDENTIFIER WhereOpt ;
+栈: # ; WhereOpt IDENTIFIER FROM DELETE                                    输入: DELETE FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ; #            # 处理: DELETE
+栈: # ; WhereOpt IDENTIFIER FROM                                           输入: DELETE FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ; #            # 处理: FROM
+栈: # ; WhereOpt IDENTIFIER                                                输入: DELETE FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ; #            # 处理: IDENTIFIER
+栈: # ; WhereOpt                                                           输入: DELETE FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ; #            # 处理: WhereOpt
+使用产生式: WhereOpt -> WHERE IDENTIFIER OPERATOR Value
+栈: # ; Value OPERATOR IDENTIFIER WHERE                                    输入: DELETE FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ; #            # 处理: WHERE
+栈: # ; Value OPERATOR IDENTIFIER                                          输入: DELETE FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ; #            # 处理: IDENTIFIER
+栈: # ; Value OPERATOR                                                     输入: DELETE FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ; #            # 处理: OPERATOR
+栈: # ; Value                                                              输入: DELETE FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ; #            # 处理: Value
+使用产生式: Value -> NUMBER
+栈: # ; NUMBER                                                             输入: DELETE FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ; #            # 处理: NUMBER
+栈: # ;                                                                    输入: DELETE FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ; #            # 处理: ;
+栈: #                                                                      输入: DELETE FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ; #            # 处理: #
+[OK] 输入完整匹配，分析成功
+[语义正确] 删除表 student 的数据
+
+>>> 处理第 12 条 SQL 语句 <<<
+SQL 语句: -- 更新测试
+UPDATE student SET age = 21, name = 'Bob' WHERE id = 3;
+[LL1 推导过程]
+栈: # UpdateStmt                                                           输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: UpdateStmt
+使用产生式: UpdateStmt -> UPDATE IDENTIFIER SET AssignmentList WhereOpt ;
+栈: # ; WhereOpt AssignmentList SET IDENTIFIER UPDATE                      输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: UPDATE
+栈: # ; WhereOpt AssignmentList SET IDENTIFIER                             输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: IDENTIFIER
+栈: # ; WhereOpt AssignmentList SET                                        输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: SET
+栈: # ; WhereOpt AssignmentList                                            输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: AssignmentList
+使用产生式: AssignmentList -> IDENTIFIER OPERATOR Value AssignTail
+栈: # ; WhereOpt AssignTail Value OPERATOR IDENTIFIER                      输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: IDENTIFIER
+栈: # ; WhereOpt AssignTail Value OPERATOR                                 输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: OPERATOR
+栈: # ; WhereOpt AssignTail Value                                          输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: Value
+使用产生式: Value -> NUMBER
+栈: # ; WhereOpt AssignTail NUMBER                                         输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: NUMBER
+栈: # ; WhereOpt AssignTail                                                输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: AssignTail
+使用产生式: AssignTail -> , IDENTIFIER OPERATOR Value AssignTail
+栈: # ; WhereOpt AssignTail Value OPERATOR IDENTIFIER ,                    输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: ,
+栈: # ; WhereOpt AssignTail Value OPERATOR IDENTIFIER                      输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: IDENTIFIER
+栈: # ; WhereOpt AssignTail Value OPERATOR                                 输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: OPERATOR
+栈: # ; WhereOpt AssignTail Value                                          输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: Value
+使用产生式: Value -> STRING
+栈: # ; WhereOpt AssignTail STRING                                         输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: STRING
+栈: # ; WhereOpt AssignTail                                                输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: AssignTail
+使用产生式: AssignTail -> ε
+栈: # ; WhereOpt                                                           输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: WhereOpt
+使用产生式: WhereOpt -> WHERE IDENTIFIER OPERATOR Value
+栈: # ; Value OPERATOR IDENTIFIER WHERE                                    输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: WHERE
+栈: # ; Value OPERATOR IDENTIFIER                                          输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: IDENTIFIER
+栈: # ; Value OPERATOR                                                     输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: OPERATOR
+栈: # ; Value                                                              输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: Value
+使用产生式: Value -> NUMBER
+栈: # ; NUMBER                                                             输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: NUMBER
+栈: # ;                                                                    输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: ;
+栈: #                                                                      输入: UPDATE IDENTIFIER SET IDENTIFIER OPERATOR NUMBER , IDENTIFIER OPERATOR STRING WHERE IDENTIFIER OPERATOR NUMBER ; # # 处理: #
+[OK] 输入完整匹配，分析成功
+[语义正确] 更新表 student
+
+>>> 处理第 13 条 SQL 语句 <<<
+SQL 语句: -- JOIN 测试
+SELECT s.id, s.name FROM student s JOIN class c ON s.id = c.sid;
+[LL1 推导过程]
+栈: # SelectStmt                                                           输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: SelectStmt
+使用产生式: SelectStmt -> SELECT SelectList FROM TableRef JoinList WhereOpt GroupOpt OrderOpt ;
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectList SELECT 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: SELECT
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectList       输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: SelectList
+使用产生式: SelectList -> SelectItem SelectListTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail SelectItem 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: SelectItem
+使用产生式: SelectItem -> ColumnRef AliasOpt
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRef 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> . IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt IDENTIFIER . 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: .
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: AliasOpt
+使用产生式: AliasOpt -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail   输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: SelectListTail
+使用产生式: SelectListTail -> , SelectItem SelectListTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail SelectItem , 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: ,
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail SelectItem 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: SelectItem
+使用产生式: SelectItem -> ColumnRef AliasOpt
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRef 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> . IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt IDENTIFIER . 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: .
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: AliasOpt
+使用产生式: AliasOpt -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail   输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: SelectListTail
+使用产生式: SelectListTail -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM                  输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: FROM
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef                       输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: TableRef
+使用产生式: TableRef -> IDENTIFIER AliasOptSimple
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList AliasOptSimple IDENTIFIER      输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList AliasOptSimple                 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: AliasOptSimple
+使用产生式: AliasOptSimple -> IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList IDENTIFIER                     输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList                                输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: JoinList
+使用产生式: JoinList -> Join JoinList
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList Join                           输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: Join
+使用产生式: Join -> JOIN IDENTIFIER AliasOptSimple ON BoolExpr
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExpr ON AliasOptSimple IDENTIFIER JOIN 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: JOIN
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExpr ON AliasOptSimple IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExpr ON AliasOptSimple     输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: AliasOptSimple
+使用产生式: AliasOptSimple -> IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExpr ON IDENTIFIER         输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExpr ON                    输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: ON
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExpr                       输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: BoolExpr
+使用产生式: BoolExpr -> BoolTerm BoolExprTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTerm          输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: BoolTerm
+使用产生式: BoolTerm -> BoolFactor BoolTermTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail BoolFactor 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: BoolFactor
+使用产生式: BoolFactor -> Predicate
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Predicate 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: Predicate
+使用产生式: Predicate -> ColumnRef OPERATOR Value
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Value OPERATOR ColumnRef 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Value OPERATOR ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Value OPERATOR ColumnRefTail 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> . IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Value OPERATOR IDENTIFIER . 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: .
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Value OPERATOR IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Value OPERATOR 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: OPERATOR
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Value 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: Value
+使用产生式: Value -> ColumnRef
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail ColumnRef 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail ColumnRefTail 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> . IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail IDENTIFIER . 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: .
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail      输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: BoolTermTail
+使用产生式: BoolTermTail -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail                   输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: BoolExprTail
+使用产生式: BoolExprTail -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList                                输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: JoinList
+使用产生式: JoinList -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt                                         输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: WhereOpt
+使用产生式: WhereOpt -> ε
+栈: # ; OrderOpt GroupOpt                                                  输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: GroupOpt
+使用产生式: GroupOpt -> ε
+栈: # ; OrderOpt                                                           输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: OrderOpt
+使用产生式: OrderOpt -> ε
+栈: # ;                                                                    输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: ;
+栈: #                                                                      输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER ; # # 处理: #
+[OK] 输入完整匹配，分析成功
+[语义正确] 查询表 student
+逻辑执行计划（优化前）:
+Select: s.id, s.name
+  Join(cond={'left': {'type': 'column', 'value': 's.id'}, 'operator': '=', 'right': {'type': 'column', 'value': 'c.sid'}})
+    SeqScan(student)
+    SeqScan(class)
+
+逻辑执行计划（谓词下推后）:
+Select: s.id, s.name
+  Join(cond={'left': {'type': 'column', 'value': 's.id'}, 'operator': '=', 'right': {'type': 'column', 'value': 'c.sid'}})
+    SeqScan(student)
+    SeqScan(class)
+
+>>> 处理第 14 条 SQL 语句 <<<
+SQL 语句: -- GROUP BY 测试
+SELECT age FROM student GROUP BY age;
+[LL1 推导过程]
+栈: # SelectStmt                                                           输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: SelectStmt
+使用产生式: SelectStmt -> SELECT SelectList FROM TableRef JoinList WhereOpt GroupOpt OrderOpt ;
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectList SELECT 输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: SELECT
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectList       输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: SelectList
+使用产生式: SelectList -> SelectItem SelectListTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail SelectItem 输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: SelectItem
+使用产生式: SelectItem -> ColumnRef AliasOpt
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRef 输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail 输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt 输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: AliasOpt
+使用产生式: AliasOpt -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail   输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: SelectListTail
+使用产生式: SelectListTail -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM                  输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: FROM
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef                       输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: TableRef
+使用产生式: TableRef -> IDENTIFIER AliasOptSimple
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList AliasOptSimple IDENTIFIER      输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList AliasOptSimple                 输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: AliasOptSimple
+使用产生式: AliasOptSimple -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList                                输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: JoinList
+使用产生式: JoinList -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt                                         输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: WhereOpt
+使用产生式: WhereOpt -> ε
+栈: # ; OrderOpt GroupOpt                                                  输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: GroupOpt
+使用产生式: GroupOpt -> GROUP BY IDENTIFIER
+栈: # ; OrderOpt IDENTIFIER BY GROUP                                       输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: GROUP
+栈: # ; OrderOpt IDENTIFIER BY                                             输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: BY
+栈: # ; OrderOpt IDENTIFIER                                                输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: IDENTIFIER
+栈: # ; OrderOpt                                                           输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: OrderOpt
+使用产生式: OrderOpt -> ε
+栈: # ;                                                                    输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: ;
+栈: #                                                                      输入: SELECT IDENTIFIER FROM IDENTIFIER GROUP BY IDENTIFIER ; #              # 处理: #
+[OK] 输入完整匹配，分析成功
+[语义正确] 查询表 student
+逻辑执行计划（优化前）:
+Select: age  [GroupBy: age]
+  SeqScan(student)
+
+逻辑执行计划（谓词下推后）:
+Select: age  [GroupBy: age]
+  SeqScan(student)
+
+>>> 处理第 15 条 SQL 语句 <<<
+SQL 语句: SELECT s.age FROM student s JOIN class c ON s.id = c.sid GROUP BY age;
+[LL1 推导过程]
+栈: # SelectStmt                                                           输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: SelectStmt
+使用产生式: SelectStmt -> SELECT SelectList FROM TableRef JoinList WhereOpt GroupOpt OrderOpt ;
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectList SELECT 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: SELECT
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectList       输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: SelectList
+使用产生式: SelectList -> SelectItem SelectListTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail SelectItem 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: SelectItem
+使用产生式: SelectItem -> ColumnRef AliasOpt
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRef 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> . IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt IDENTIFIER . 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: .
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: AliasOpt
+使用产生式: AliasOpt -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail   输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: SelectListTail
+使用产生式: SelectListTail -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM                  输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: FROM
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef                       输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: TableRef
+使用产生式: TableRef -> IDENTIFIER AliasOptSimple
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList AliasOptSimple IDENTIFIER      输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList AliasOptSimple                 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: AliasOptSimple
+使用产生式: AliasOptSimple -> IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList IDENTIFIER                     输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList                                输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: JoinList
+使用产生式: JoinList -> Join JoinList
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList Join                           输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: Join
+使用产生式: Join -> JOIN IDENTIFIER AliasOptSimple ON BoolExpr
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExpr ON AliasOptSimple IDENTIFIER JOIN 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: JOIN
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExpr ON AliasOptSimple IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExpr ON AliasOptSimple     输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: AliasOptSimple
+使用产生式: AliasOptSimple -> IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExpr ON IDENTIFIER         输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExpr ON                    输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: ON
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExpr                       输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: BoolExpr
+使用产生式: BoolExpr -> BoolTerm BoolExprTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTerm          输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: BoolTerm
+使用产生式: BoolTerm -> BoolFactor BoolTermTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail BoolFactor 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: BoolFactor
+使用产生式: BoolFactor -> Predicate
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Predicate 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: Predicate
+使用产生式: Predicate -> ColumnRef OPERATOR Value
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Value OPERATOR ColumnRef 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Value OPERATOR ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Value OPERATOR ColumnRefTail 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> . IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Value OPERATOR IDENTIFIER . 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: .
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Value OPERATOR IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Value OPERATOR 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: OPERATOR
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Value 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: Value
+使用产生式: Value -> ColumnRef
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail ColumnRef 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail ColumnRefTail 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> . IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail IDENTIFIER . 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: .
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail      输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: BoolTermTail
+使用产生式: BoolTermTail -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail                   输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: BoolExprTail
+使用产生式: BoolExprTail -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList                                输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: JoinList
+使用产生式: JoinList -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt                                         输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: WhereOpt
+使用产生式: WhereOpt -> ε
+栈: # ; OrderOpt GroupOpt                                                  输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: GroupOpt
+使用产生式: GroupOpt -> GROUP BY IDENTIFIER
+栈: # ; OrderOpt IDENTIFIER BY GROUP                                       输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: GROUP
+栈: # ; OrderOpt IDENTIFIER BY                                             输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: BY
+栈: # ; OrderOpt IDENTIFIER                                                输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt                                                           输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: OrderOpt
+使用产生式: OrderOpt -> ε
+栈: # ;                                                                    输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: ;
+栈: #                                                                      输入: SELECT IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER GROUP BY IDENTIFIER ; # # 处理: #
+[OK] 输入完整匹配，分析成功
+[语义正确] 查询表 student
+逻辑执行计划（优化前）:
+Select: s.age  [GroupBy: age]
+  Join(cond={'left': {'type': 'column', 'value': 's.id'}, 'operator': '=', 'right': {'type': 'column', 'value': 'c.sid'}})
+    SeqScan(student)
+    SeqScan(class)
+
+逻辑执行计划（谓词下推后）:
+Select: s.age  [GroupBy: age]
+  Join(cond={'left': {'type': 'column', 'value': 's.id'}, 'operator': '=', 'right': {'type': 'column', 'value': 'c.sid'}})
+    SeqScan(student)
+    SeqScan(class)
+
+>>> 处理第 16 条 SQL 语句 <<<
+SQL 语句: -- ORDER BY 测试
+SELECT id, name FROM student ORDER BY name ASC;
+[LL1 推导过程]
+栈: # SelectStmt                                                           输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: SelectStmt
+使用产生式: SelectStmt -> SELECT SelectList FROM TableRef JoinList WhereOpt GroupOpt OrderOpt ;
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectList SELECT 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: SELECT
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectList       输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: SelectList
+使用产生式: SelectList -> SelectItem SelectListTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail SelectItem 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: SelectItem
+使用产生式: SelectItem -> ColumnRef AliasOpt
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRef 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: AliasOpt
+使用产生式: AliasOpt -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail   输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: SelectListTail
+使用产生式: SelectListTail -> , SelectItem SelectListTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail SelectItem , 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: ,
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail SelectItem 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: SelectItem
+使用产生式: SelectItem -> ColumnRef AliasOpt
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRef 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: AliasOpt
+使用产生式: AliasOpt -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail   输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: SelectListTail
+使用产生式: SelectListTail -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM                  输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: FROM
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef                       输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: TableRef
+使用产生式: TableRef -> IDENTIFIER AliasOptSimple
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList AliasOptSimple IDENTIFIER      输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList AliasOptSimple                 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: AliasOptSimple
+使用产生式: AliasOptSimple -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList                                输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: JoinList
+使用产生式: JoinList -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt                                         输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: WhereOpt
+使用产生式: WhereOpt -> ε
+栈: # ; OrderOpt GroupOpt                                                  输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: GroupOpt
+使用产生式: GroupOpt -> ε
+栈: # ; OrderOpt                                                           输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: OrderOpt
+使用产生式: OrderOpt -> ORDER BY IDENTIFIER OrderDir
+栈: # ; OrderDir IDENTIFIER BY ORDER                                       输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: ORDER
+栈: # ; OrderDir IDENTIFIER BY                                             输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: BY
+栈: # ; OrderDir IDENTIFIER                                                输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: IDENTIFIER
+栈: # ; OrderDir                                                           输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: OrderDir
+使用产生式: OrderDir -> ASC
+栈: # ; ASC                                                                输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: ASC
+栈: # ;                                                                    输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: ;
+栈: #                                                                      输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER ORDER BY IDENTIFIER ASC ; # # 处理: #
+[OK] 输入完整匹配，分析成功
+[语义正确] 查询表 student
+逻辑执行计划（优化前）:
+Select: id, name  [OrderBy: name ASC]
+  SeqScan(student)
+
+逻辑执行计划（谓词下推后）:
+Select: id, name  [OrderBy: name ASC]
+  SeqScan(student)
+
+>>> 处理第 17 条 SQL 语句 <<<
+SQL 语句: SELECT id, age FROM student WHERE age > 18 ORDER BY age DESC;
+[LL1 推导过程]
+栈: # SelectStmt                                                           输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: SelectStmt
+使用产生式: SelectStmt -> SELECT SelectList FROM TableRef JoinList WhereOpt GroupOpt OrderOpt ;
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectList SELECT 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: SELECT
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectList       输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: SelectList
+使用产生式: SelectList -> SelectItem SelectListTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail SelectItem 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: SelectItem
+使用产生式: SelectItem -> ColumnRef AliasOpt
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRef 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: AliasOpt
+使用产生式: AliasOpt -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail   输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: SelectListTail
+使用产生式: SelectListTail -> , SelectItem SelectListTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail SelectItem , 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: ,
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail SelectItem 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: SelectItem
+使用产生式: SelectItem -> ColumnRef AliasOpt
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRef 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: AliasOpt
+使用产生式: AliasOpt -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail   输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: SelectListTail
+使用产生式: SelectListTail -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM                  输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: FROM
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef                       输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: TableRef
+使用产生式: TableRef -> IDENTIFIER AliasOptSimple
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList AliasOptSimple IDENTIFIER      输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList AliasOptSimple                 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: AliasOptSimple
+使用产生式: AliasOptSimple -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList                                输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: JoinList
+使用产生式: JoinList -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt                                         输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: WhereOpt
+使用产生式: WhereOpt -> WHERE BoolExpr
+栈: # ; OrderOpt GroupOpt BoolExpr WHERE                                   输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: WHERE
+栈: # ; OrderOpt GroupOpt BoolExpr                                         输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: BoolExpr
+使用产生式: BoolExpr -> BoolTerm BoolExprTail
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTerm                            输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: BoolTerm
+使用产生式: BoolTerm -> BoolFactor BoolTermTail
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail BoolFactor             输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: BoolFactor
+使用产生式: BoolFactor -> Predicate
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Predicate              输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: Predicate
+使用产生式: Predicate -> ColumnRef OPERATOR Value
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value OPERATOR ColumnRef 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value OPERATOR ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value OPERATOR ColumnRefTail 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> ε
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value OPERATOR         输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: OPERATOR
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value                  输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: Value
+使用产生式: Value -> NUMBER
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail NUMBER                 输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: NUMBER
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail                        输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: BoolTermTail
+使用产生式: BoolTermTail -> ε
+栈: # ; OrderOpt GroupOpt BoolExprTail                                     输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: BoolExprTail
+使用产生式: BoolExprTail -> ε
+栈: # ; OrderOpt GroupOpt                                                  输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: GroupOpt
+使用产生式: GroupOpt -> ε
+栈: # ; OrderOpt                                                           输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: OrderOpt
+使用产生式: OrderOpt -> ORDER BY IDENTIFIER OrderDir
+栈: # ; OrderDir IDENTIFIER BY ORDER                                       输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: ORDER
+栈: # ; OrderDir IDENTIFIER BY                                             输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: BY
+栈: # ; OrderDir IDENTIFIER                                                输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: IDENTIFIER
+栈: # ; OrderDir                                                           输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: OrderDir
+使用产生式: OrderDir -> DESC
+栈: # ; DESC                                                               输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: DESC
+栈: # ;                                                                    输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: ;
+栈: #                                                                      输入: SELECT IDENTIFIER , IDENTIFIER FROM IDENTIFIER WHERE IDENTIFIER OPERATOR NUMBER ORDER BY IDENTIFIER DESC ; # # 处理: #
+[OK] 输入完整匹配，分析成功
+[语义正确] 查询表 student
+逻辑执行计划（优化前）:
+Select: id, age  [Filter: age > 18]  [OrderBy: age DESC]
+  SeqScan(student)
+
+逻辑执行计划（谓词下推后）:
+Select: id, age  [OrderBy: age DESC]
+  SeqScan(student, cond={'left': {'type': 'column', 'value': 'age'}, 'operator': '>', 'right': {'type': 'constant', 'value_type': 'int', 'value': 18}})
+
+>>> 处理第 18 条 SQL 语句 <<<
+SQL 语句: -- 谓词下推测试
+SELECT s.id, s.name
+FROM student s JOIN class c ON s.id = c.sid
+WHERE s.age > 18 AND c.name = 'CS101';
+[LL1 推导过程]
+栈: # SelectStmt                                                           输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: SelectStmt
+使用产生式: SelectStmt -> SELECT SelectList FROM TableRef JoinList WhereOpt GroupOpt OrderOpt ;
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectList SELECT 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: SELECT
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectList       输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: SelectList
+使用产生式: SelectList -> SelectItem SelectListTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail SelectItem 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: SelectItem
+使用产生式: SelectItem -> ColumnRef AliasOpt
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRef 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> . IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt IDENTIFIER . 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: .
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: AliasOpt
+使用产生式: AliasOpt -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail   输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: SelectListTail
+使用产生式: SelectListTail -> , SelectItem SelectListTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail SelectItem , 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: ,
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail SelectItem 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: SelectItem
+使用产生式: SelectItem -> ColumnRef AliasOpt
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRef 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt ColumnRefTail 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> . IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt IDENTIFIER . 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: .
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail AliasOpt 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: AliasOpt
+使用产生式: AliasOpt -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM SelectListTail   输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: SelectListTail
+使用产生式: SelectListTail -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef FROM                  输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: FROM
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList TableRef                       输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: TableRef
+使用产生式: TableRef -> IDENTIFIER AliasOptSimple
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList AliasOptSimple IDENTIFIER      输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList AliasOptSimple                 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: AliasOptSimple
+使用产生式: AliasOptSimple -> IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList IDENTIFIER                     输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList                                输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: JoinList
+使用产生式: JoinList -> Join JoinList
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList Join                           输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: Join
+使用产生式: Join -> JOIN IDENTIFIER AliasOptSimple ON BoolExpr
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExpr ON AliasOptSimple IDENTIFIER JOIN 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: JOIN
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExpr ON AliasOptSimple IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExpr ON AliasOptSimple     输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: AliasOptSimple
+使用产生式: AliasOptSimple -> IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExpr ON IDENTIFIER         输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExpr ON                    输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: ON
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExpr                       输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: BoolExpr
+使用产生式: BoolExpr -> BoolTerm BoolExprTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTerm          输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: BoolTerm
+使用产生式: BoolTerm -> BoolFactor BoolTermTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail BoolFactor 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: BoolFactor
+使用产生式: BoolFactor -> Predicate
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Predicate 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: Predicate
+使用产生式: Predicate -> ColumnRef OPERATOR Value
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Value OPERATOR ColumnRef 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Value OPERATOR ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Value OPERATOR ColumnRefTail 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> . IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Value OPERATOR IDENTIFIER . 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: .
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Value OPERATOR IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Value OPERATOR 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: OPERATOR
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail Value 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: Value
+使用产生式: Value -> ColumnRef
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail ColumnRef 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail ColumnRefTail 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> . IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail IDENTIFIER . 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: .
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail BoolTermTail      输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: BoolTermTail
+使用产生式: BoolTermTail -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList BoolExprTail                   输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: BoolExprTail
+使用产生式: BoolExprTail -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt JoinList                                输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: JoinList
+使用产生式: JoinList -> ε
+栈: # ; OrderOpt GroupOpt WhereOpt                                         输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: WhereOpt
+使用产生式: WhereOpt -> WHERE BoolExpr
+栈: # ; OrderOpt GroupOpt BoolExpr WHERE                                   输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: WHERE
+栈: # ; OrderOpt GroupOpt BoolExpr                                         输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: BoolExpr
+使用产生式: BoolExpr -> BoolTerm BoolExprTail
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTerm                            输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: BoolTerm
+使用产生式: BoolTerm -> BoolFactor BoolTermTail
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail BoolFactor             输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: BoolFactor
+使用产生式: BoolFactor -> Predicate
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Predicate              输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: Predicate
+使用产生式: Predicate -> ColumnRef OPERATOR Value
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value OPERATOR ColumnRef 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value OPERATOR ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value OPERATOR ColumnRefTail 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> . IDENTIFIER
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value OPERATOR IDENTIFIER . 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: .
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value OPERATOR IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value OPERATOR         输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: OPERATOR
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value                  输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: Value
+使用产生式: Value -> NUMBER
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail NUMBER                 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: NUMBER
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail                        输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: BoolTermTail
+使用产生式: BoolTermTail -> AND BoolFactor BoolTermTail
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail BoolFactor AND         输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: AND
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail BoolFactor             输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: BoolFactor
+使用产生式: BoolFactor -> Predicate
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Predicate              输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: Predicate
+使用产生式: Predicate -> ColumnRef OPERATOR Value
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value OPERATOR ColumnRef 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: ColumnRef
+使用产生式: ColumnRef -> IDENTIFIER ColumnRefTail
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value OPERATOR ColumnRefTail IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value OPERATOR ColumnRefTail 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: ColumnRefTail
+使用产生式: ColumnRefTail -> . IDENTIFIER
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value OPERATOR IDENTIFIER . 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: .
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value OPERATOR IDENTIFIER 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: IDENTIFIER
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value OPERATOR         输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: OPERATOR
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail Value                  输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: Value
+使用产生式: Value -> STRING
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail STRING                 输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: STRING
+栈: # ; OrderOpt GroupOpt BoolExprTail BoolTermTail                        输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: BoolTermTail
+使用产生式: BoolTermTail -> ε
+栈: # ; OrderOpt GroupOpt BoolExprTail                                     输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: BoolExprTail
+使用产生式: BoolExprTail -> ε
+栈: # ; OrderOpt GroupOpt                                                  输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: GroupOpt
+使用产生式: GroupOpt -> ε
+栈: # ; OrderOpt                                                           输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: OrderOpt
+使用产生式: OrderOpt -> ε
+栈: # ;                                                                    输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: ;
+栈: #                                                                      输入: SELECT IDENTIFIER . IDENTIFIER , IDENTIFIER . IDENTIFIER FROM IDENTIFIER IDENTIFIER JOIN IDENTIFIER IDENTIFIER ON IDENTIFIER . IDENTIFIER OPERATOR IDENTIFIER . IDENTIFIER WHERE IDENTIFIER . IDENTIFIER OPERATOR NUMBER AND IDENTIFIER . IDENTIFIER OPERATOR STRING ; # # 处理: #
+[OK] 输入完整匹配，分析成功
+[语义正确] 查询表 student
+逻辑执行计划（优化前）:
+Select: s.id, s.name  [Filter: (s.age > 18 AND c.name = 'CS101')]
+  Join(cond={'left': {'type': 'column', 'value': 's.id'}, 'operator': '=', 'right': {'type': 'column', 'value': 'c.sid'}})
+    SeqScan(student)
+    SeqScan(class)
+
+逻辑执行计划（谓词下推后）:
+Select: s.id, s.name
+  Join(cond={'left': {'type': 'column', 'value': 's.id'}, 'operator': '=', 'right': {'type': 'column', 'value': 'c.sid'}})
+    SeqScan(student, cond={'left': {'type': 'column', 'value': 's.age'}, 'operator': '>', 'right': {'type': 'constant', 'value_type': 'int', 'value': 18}})
+    SeqScan(class, cond={'left': {'type': 'column', 'value': 'c.name'}, 'operator': '=', 'right': {'type': 'constant', 'value_type': 'string', 'value': 'CS101'}})

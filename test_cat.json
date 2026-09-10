@@ -1,0 +1,17 @@
+{
+  "t": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "INT"
+      },
+      {
+        "name": "is_active",
+        "type": "BOOL"
+      }
+    ],
+    "primary_key": null,
+    "row_count": 0,
+    "constraints": []
+  }
+}
