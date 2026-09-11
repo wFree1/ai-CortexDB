@@ -148,6 +148,10 @@
     ]
   },
   "student": {
+    "table_id": 104,
+    "root_page": -1,
+    "primary_key": "id",
+    "row_count": 0,
     "columns": [
       {
         "name": "id",
@@ -162,8 +166,6 @@
         "type": "INT"
       }
     ],
-    "primary_key": "id",
-    "row_count": 2,
     "constraints": [
       [
         "PRIMARY_KEY",
@@ -174,6 +176,10 @@
     ]
   },
   "class": {
+    "table_id": 105,
+    "root_page": -1,
+    "primary_key": "sid",
+    "row_count": 3,
     "columns": [
       {
         "name": "sid",
@@ -184,8 +190,6 @@
         "type": "VARCHAR"
       }
     ],
-    "primary_key": "sid",
-    "row_count": 3,
     "constraints": [
       [
         "PRIMARY_KEY",
@@ -196,6 +200,10 @@
     ]
   },
   "dept": {
+    "table_id": 106,
+    "root_page": -1,
+    "primary_key": "id",
+    "row_count": 0,
     "columns": [
       {
         "name": "id",
@@ -206,8 +214,30 @@
         "type": "VARCHAR(8)"
       }
     ],
+    "constraints": [
+      [
+        "PRIMARY_KEY",
+        "id",
+        "",
+        ""
+      ]
+    ]
+  },
+  "courses": {
+    "table_id": 107,
+    "root_page": -1,
     "primary_key": "id",
-    "row_count": 0,
+    "row_count": 9,
+    "columns": [
+      {
+        "name": "id",
+        "type": "INT"
+      },
+      {
+        "name": "course_name",
+        "type": "VARCHAR(50)"
+      }
+    ],
     "constraints": [
       [
         "PRIMARY_KEY",

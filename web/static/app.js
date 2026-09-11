@@ -11,7 +11,11 @@
     nextTabSeq: 1,
     tables: [],
     overview: null,
-    filterKeyword: ''
+    filterKeyword: '',
+    databases: ['datasphere'],
+    currentDatabase: 'datasphere',
+    databasesDetail: [],
+    expandedDbs: new Set()
   };
 
   // --- 预置 SQL 模版库 ---
@@ -31,6 +35,7 @@
 
   // --- DOM 引用 ---
   const el = {
+    headerDbSelect: document.getElementById('header-db-select'),
     headerDbName: document.getElementById('header-db-name'),
     headerHitRate: document.getElementById('header-hit-rate'),
     btnRunSql: document.getElementById('btn-run-sql'),
@@ -83,20 +88,49 @@
 
   async function refreshDatabaseMeta() {
     try {
-      // 1. 获取全局概览
-      const overview = await apiGet('/api/overview');
+      // 1. 获取全局概览与多数据库元数据详情
+      const [overview, dbRes] = await Promise.all([
+        apiGet('/api/overview'),
+        apiGet('/api/databases')
+      ]);
+
       state.overview = overview;
-      if (overview && overview.buffer_pool) {
-        el.headerHitRate.textContent = `命中率: ${overview.buffer_pool.hit_rate_pct}%`;
-        el.metricDbSize.textContent = `${overview.file_size_kb} KB`;
-        el.metricCachedPages.textContent = `${overview.buffer_pool.cached_pages} / ${overview.buffer_pool.capacity}`;
-        el.metricDirtyPages.textContent = `${overview.buffer_pool.dirty_pages} 页`;
+      if (overview) {
+        if (overview.current_database) {
+          state.currentDatabase = overview.current_database;
+        }
+        if (overview.databases && Array.isArray(overview.databases)) {
+          state.databases = overview.databases;
+        }
+        if (overview.buffer_pool) {
+          el.headerHitRate.textContent = `命中率: ${overview.buffer_pool.hit_rate_pct}%`;
+          el.metricDbSize.textContent = `${overview.file_size_kb} KB`;
+          el.metricCachedPages.textContent = `${overview.buffer_pool.cached_pages} / ${overview.buffer_pool.capacity}`;
+          el.metricDirtyPages.textContent = `${overview.buffer_pool.dirty_pages} 页`;
+        }
       }
 
-      // 2. 获取表列表
+      if (dbRes) {
+        if (dbRes.current_database) state.currentDatabase = dbRes.current_database;
+        if (dbRes.databases) state.databases = dbRes.databases;
+        if (dbRes.databases_detail) state.databasesDetail = dbRes.databases_detail;
+      }
+
+      renderDatabaseSelect();
+
+      // 2. 获取当前活动库表列表 (用于主工作区查询与模版)
       const tablesRes = await apiGet('/api/tables');
       state.tables = tablesRes.tables || [];
-      el.sidebarTableCount.textContent = `${state.tables.length} 张表`;
+
+      // 计算所有数据库的总表数
+      let totalTables = 0;
+      if (state.databasesDetail && state.databasesDetail.length > 0) {
+        totalTables = state.databasesDetail.reduce((acc, d) => acc + (d.table_count || (d.tables ? d.tables.length : 0)), 0);
+      } else {
+        totalTables = state.tables.length;
+      }
+      const totalDbs = (state.databases && state.databases.length) || 1;
+      el.sidebarTableCount.textContent = `${totalTables} 张表 · ${totalDbs} 库`;
 
       renderObjectTree();
     } catch (e) {
@@ -104,68 +138,156 @@
     }
   }
 
-  // ==========================================================================
-  // Navicat 左侧对象导航树渲染 (Object Explorer)
-  // ==========================================================================
-
-  function renderObjectTree() {
-    const filter = state.filterKeyword.trim().toLowerCase();
-    const filtered = state.tables.filter(t => {
-      if (!filter) return true;
-      if (t.name.toLowerCase().includes(filter)) return true;
-      return (t.columns || []).some(c => c.name.toLowerCase().includes(filter));
+  function renderDatabaseSelect() {
+    if (!el.headerDbSelect) return;
+    const dbs = state.databases && state.databases.length > 0 ? state.databases : ['datasphere'];
+    let html = '';
+    dbs.forEach(dbName => {
+      const selected = (dbName === state.currentDatabase) ? 'selected' : '';
+      html += `<option value="${escapeHtml(dbName)}" ${selected}>${escapeHtml(dbName)}</option>`;
     });
+    el.headerDbSelect.innerHTML = html;
+  }
 
-    if (state.tables.length === 0) {
-      el.databaseTree.innerHTML = `
-        <div class="empty-grid-placeholder" style="padding: 30px 10px;">
-          <span>当前数据库暂无数据表</span>
-          <button class="btn btn-secondary" onclick="document.getElementById('btn-seed-demo').click()">一键载入演示数据</button>
-        </div>
-      `;
+  // ==========================================================================
+  // Navicat 左侧对象导航树渲染 (Object Explorer - 多数据库完整支持)
+  // ==========================================================================
+
+  function toggleDbNode(dbName, nodeItemEl) {
+    nodeItemEl.classList.toggle('expanded');
+    const children = nodeItemEl.nextElementSibling;
+    if (children && children.classList.contains('node-children')) {
+      children.classList.toggle('open');
+      if (children.classList.contains('open')) {
+        state.expandedDbs.add(dbName);
+      } else {
+        state.expandedDbs.delete(dbName);
+      }
+    }
+  }
+
+  async function switchDatabase(targetDb) {
+    if (!targetDb) return;
+    if (targetDb === state.currentDatabase) {
+      el.footerExecStats.textContent = `当前已在数据库: ${targetDb}`;
       return;
     }
+    el.footerExecStats.textContent = `正在切换至数据库: ${targetDb}...`;
+    try {
+      const res = await apiPost('/api/database/switch', { database: targetDb });
+      if (res.success) {
+        state.currentDatabase = res.current_database || targetDb;
+        state.expandedDbs.add(state.currentDatabase);
+        await refreshDatabaseMeta();
+        el.footerExecStats.textContent = `已成功切换至数据库: ${state.currentDatabase}`;
+      } else {
+        alert("切换数据库失败: " + (res.error || res.message));
+      }
+    } catch (err) {
+      alert("切换数据库异常: " + err.message);
+    }
+  }
 
-    let html = `
-      <div class="tree-node">
-        <div class="node-item expanded" id="root-db-node">
-          <span class="arrow">▶</span>
-          <span class="node-icon">🗄️</span>
-          <span class="node-label" style="font-weight: 600; color: #fff;">datasphere</span>
-          <span class="node-badge" style="background: rgba(99,102,241,0.2); color: #818cf8;">DB</span>
-        </div>
-        <div class="node-children open" id="tables-group-node">
-    `;
+  function renderObjectTree() {
+    let dbList = state.databasesDetail;
+    if (!dbList || dbList.length === 0) {
+      const dbs = (state.databases && state.databases.length > 0) ? state.databases : ['datasphere'];
+      dbList = dbs.map(name => ({
+        name: name,
+        is_active: (name === (state.currentDatabase || 'datasphere')),
+        table_count: (name === state.currentDatabase) ? state.tables.length : 0,
+        tables: (name === state.currentDatabase) ? state.tables : []
+      }));
+    }
 
-    filtered.forEach(t => {
-      const colCount = (t.columns || []).length;
+    const filter = state.filterKeyword.trim().toLowerCase();
+    let html = '';
+
+    dbList.forEach(db => {
+      const isActive = (db.name === state.currentDatabase);
+      const isExpanded = state.expandedDbs.has(db.name) || isActive || Boolean(filter);
+      const tables = db.tables || [];
+
+      const filteredTables = tables.filter(t => {
+        if (!filter) return true;
+        if (t.name.toLowerCase().includes(filter)) return true;
+        return (t.columns || []).some(c => c.name.toLowerCase().includes(filter));
+      });
+
+      // 如果有过滤条件且当前库没有匹配项，则跳过展示
+      if (filter && filteredTables.length === 0 && !db.name.toLowerCase().includes(filter)) {
+        return;
+      }
+
       html += `
-        <div class="tree-node" data-table="${t.name}">
-          <div class="node-item" onclick="window.DataSphereStudio.toggleNode(this)" ondblclick="window.DataSphereStudio.openTableDataTab('${t.name}')">
+        <div class="tree-node db-root-node" data-dbname="${escapeHtml(db.name)}" style="margin-bottom: 6px;">
+          <div class="node-item ${isExpanded ? 'expanded' : ''} ${isActive ? 'active-db-node' : ''}" 
+               onclick="window.DataSphereStudio.toggleDbNode('${escapeHtml(db.name)}', this)" 
+               ondblclick="window.DataSphereStudio.switchDatabase('${escapeHtml(db.name)}')"
+               title="${isActive ? '当前激活数据库' : '双击切换至此数据库'}">
             <span class="arrow">▶</span>
-            <span class="node-icon">📄</span>
-            <span class="node-label">${t.name}</span>
-            <span class="node-badge badge-rows">${t.row_count} 行</span>
+            <span class="node-icon">${isActive ? '🗄️' : '📁'}</span>
+            <span class="node-label" style="font-weight: 600; color: ${isActive ? '#60a5fa' : '#cbd5e1'}; font-size: 13px;">${escapeHtml(db.name)}</span>
+            ${isActive ? `
+              <span class="node-badge badge-active-db" title="当前激活的工作数据库">当前</span>
+            ` : `
+              <button class="btn-mini btn-switch-db" onclick="event.stopPropagation(); window.DataSphereStudio.switchDatabase('${escapeHtml(db.name)}')" title="切换到此数据库">切库</button>
+            `}
+            <span class="node-badge" style="background: rgba(255,255,255,0.06); color: var(--text-dim); margin-left: 2px;">${db.table_count ?? tables.length} 表</span>
           </div>
-          <div class="node-children">
-            <div style="display: flex; gap: 4px; padding: 4px 8px; margin-bottom: 4px;">
-              <button class="btn-mini" onclick="window.DataSphereStudio.openTableDataTab('${t.name}')">查看数据</button>
-              <button class="btn-mini" onclick="window.DataSphereStudio.openTableSchemaTab('${t.name}')">表结构</button>
-            </div>
+          <div class="node-children ${isExpanded ? 'open' : ''}" id="db-children-${escapeHtml(db.name)}">
       `;
 
-      // 字段子树
-      (t.columns || []).forEach(c => {
-        const isPk = (c.name === t.primary_key);
-        html += `
-          <div class="node-item" style="padding-left: 12px; font-size: 12px;">
-            <span class="node-icon">${isPk ? '🔑' : '🔹'}</span>
-            <span class="node-label">${c.name}</span>
-            ${isPk ? '<span class="node-badge badge-pk">PK</span>' : ''}
-            <span class="node-badge badge-type">${c.type}</span>
-          </div>
-        `;
-      });
+      if (filteredTables.length === 0) {
+        if (filter) {
+          html += `<div style="padding: 6px 14px; color: var(--text-dim); font-size: 11.5px; font-style: italic;">无匹配数据表</div>`;
+        } else {
+          html += `
+            <div style="padding: 10px 12px; text-align: center; color: var(--text-dim); font-size: 11.5px;">
+              <span>暂无数据表</span>
+              ${isActive ? `
+                <div style="margin-top: 6px;">
+                  <button class="btn btn-secondary" onclick="document.getElementById('btn-seed-demo').click()" style="padding: 2px 8px; font-size: 11px;">载入演示数据</button>
+                </div>
+              ` : ''}
+            </div>
+          `;
+        }
+      } else {
+        filteredTables.forEach(t => {
+          html += `
+            <div class="tree-node" data-table="${escapeHtml(t.name)}">
+              <div class="node-item" onclick="window.DataSphereStudio.toggleNode(this)" ondblclick="window.DataSphereStudio.openTableDataTab('${escapeHtml(t.name)}', '${escapeHtml(db.name)}')">
+                <span class="arrow">▶</span>
+                <span class="node-icon">📄</span>
+                <span class="node-label">${escapeHtml(t.name)}</span>
+                <span class="node-badge badge-rows">${t.row_count || 0} 行</span>
+              </div>
+              <div class="node-children">
+                <div style="display: flex; gap: 4px; padding: 4px 8px; margin-bottom: 4px;">
+                  <button class="btn-mini" onclick="window.DataSphereStudio.openTableDataTab('${escapeHtml(t.name)}', '${escapeHtml(db.name)}')">查看数据</button>
+                  <button class="btn-mini" onclick="window.DataSphereStudio.openTableSchemaTab('${escapeHtml(t.name)}', '${escapeHtml(db.name)}')">表结构</button>
+                </div>
+          `;
+
+          (t.columns || []).forEach(c => {
+            const isPk = (c.name === t.primary_key);
+            html += `
+              <div class="node-item" style="padding-left: 12px; font-size: 12px;">
+                <span class="node-icon">${isPk ? '🔑' : '🔹'}</span>
+                <span class="node-label">${escapeHtml(c.name)}</span>
+                ${isPk ? '<span class="node-badge badge-pk">PK</span>' : ''}
+                <span class="node-badge badge-type">${escapeHtml(c.type)}</span>
+              </div>
+            `;
+          });
+
+          html += `
+              </div>
+            </div>
+          `;
+        });
+      }
 
       html += `
           </div>
@@ -173,10 +295,9 @@
       `;
     });
 
-    html += `
-        </div>
-      </div>
-    `;
+    if (!html) {
+      html = `<div style="padding: 20px; text-align: center; color: var(--text-dim); font-size: 12px;">未匹配到任何数据库或数据表</div>`;
+    }
 
     el.databaseTree.innerHTML = html;
   }
@@ -203,8 +324,11 @@
     switchTab(id);
   }
 
-  function openTableDataTab(tableName) {
-    const id = `tab_data_${tableName}`;
+  async function openTableDataTab(tableName, dbName = null) {
+    if (dbName && dbName !== state.currentDatabase) {
+      await switchDatabase(dbName);
+    }
+    const id = `tab_data_${dbName || state.currentDatabase}_${tableName}`;
     let tab = state.tabs.find(t => t.id === id);
     if (!tab) {
       tab = {
@@ -212,6 +336,7 @@
         title: `${tableName} [数据]`,
         type: 'table_data',
         tableName: tableName,
+        database: dbName || state.currentDatabase,
         page: 1,
         pageSize: 100,
         data: null
@@ -222,8 +347,11 @@
     loadTableData(tab);
   }
 
-  function openTableSchemaTab(tableName) {
-    const id = `tab_schema_${tableName}`;
+  async function openTableSchemaTab(tableName, dbName = null) {
+    if (dbName && dbName !== state.currentDatabase) {
+      await switchDatabase(dbName);
+    }
+    const id = `tab_schema_${dbName || state.currentDatabase}_${tableName}`;
     let tab = state.tabs.find(t => t.id === id);
     if (!tab) {
       tab = {
@@ -231,6 +359,7 @@
         title: `${tableName} [设计]`,
         type: 'table_schema',
         tableName: tableName,
+        database: dbName || state.currentDatabase,
         schema: null
       };
       state.tabs.push(tab);
@@ -749,8 +878,17 @@
 
       el.footerExecStats.textContent = `执行完成 (${res.total_execution_time_ms} ms, 共 ${res.total_statements} 语句)`;
 
-      // 如果执行了 DDL 或 DML（更新/删除/插入/建表），自动刷新元数据
-      const isMutating = /create|alter|drop|truncate|insert|update|delete/i.test(sqlInput);
+      // 实时感知当前活动数据库变更
+      if (res.current_database && res.current_database !== state.currentDatabase) {
+        state.currentDatabase = res.current_database;
+      }
+      if (res.databases && Array.isArray(res.databases)) {
+        state.databases = res.databases;
+      }
+      renderDatabaseSelect();
+
+      // 如果执行了 DDL 或 DML 或数据库操作（更新/删除/插入/建表/切库），自动刷新元数据
+      const isMutating = /create|alter|drop|truncate|insert|update|delete|use/i.test(sqlInput);
       if (isMutating) {
         await refreshDatabaseMeta();
       }
@@ -788,16 +926,51 @@
   }
 
   // ==========================================================================
+  // 编辑器辅助与外部调用控制
+  // ==========================================================================
+
+  function insertSqlToEditor(sql) {
+    if (!sql) return;
+    let currentTab = state.tabs.find(t => t.id === state.activeTabId && t.type === 'query');
+    if (!currentTab) {
+      currentTab = state.tabs.find(t => t.type === 'query');
+      if (currentTab) {
+        switchTab(currentTab.id);
+      } else {
+        createNewQueryTab(sql);
+        currentTab = state.tabs.find(t => t.id === state.activeTabId && t.type === 'query');
+      }
+    }
+    if (currentTab) {
+      currentTab.sql = sql;
+      const ta = document.getElementById(`sql-input-${currentTab.id}`);
+      if (ta) {
+        ta.value = sql;
+        ta.focus();
+      }
+    }
+    el.footerExecStats.textContent = 'SQL 已填入当前查询窗口';
+  }
+
+  async function runSqlDirectly(sql) {
+    if (!sql) return;
+    insertSqlToEditor(sql);
+    setTimeout(() => {
+      executeCurrentQuery();
+    }, 60);
+  }
+
+  // ==========================================================================
   // 全局暴露给 HTML 内联事件的函数
   // ==========================================================================
 
   window.DataSphereStudio = {
     switchTab: (tabId) => switchTab(tabId),
     closeTab: (tabId, evt) => closeTab(tabId, evt),
-    openTableDataTab: (tableName) => openTableDataTab(tableName),
-    openTableSchemaTab: (tableName) => openTableSchemaTab(tableName),
+    openTableDataTab: (tableName, dbName) => openTableDataTab(tableName, dbName),
+    openTableSchemaTab: (tableName, dbName) => openTableSchemaTab(tableName, dbName),
     refreshTableData: (tableName) => {
-      const tab = state.tabs.find(t => t.id === `tab_data_${tableName}`);
+      const tab = state.tabs.find(t => (t.type === 'table_data' && t.tableName === tableName) || t.id === state.activeTabId);
       if (tab) loadTableData(tab);
     },
     clearTabLogs: (tabId) => {
@@ -844,14 +1017,21 @@
       const ta = document.getElementById(`sql-input-${currentTab.id}`);
       if (ta) ta.value = '';
     },
+    insertSql: (sql) => insertSqlToEditor(sql),
+    runSqlDirect: (sql) => runSqlDirectly(sql),
     toggleNode: (nodeItemEl) => {
       nodeItemEl.classList.toggle('expanded');
       const children = nodeItemEl.nextElementSibling;
       if (children && children.classList.contains('node-children')) {
         children.classList.toggle('open');
       }
-    }
+    },
+    toggleDbNode: (dbName, nodeItemEl) => toggleDbNode(dbName, nodeItemEl),
+    switchDatabase: (dbName) => switchDatabase(dbName)
   };
+
+  // 全局兼容易用别名
+  window.Studio = window.DataSphereStudio;
 
   // ==========================================================================
   // CortexDB Native AI Copilot Controller
@@ -982,7 +1162,7 @@
 
     if (data.generated_sql) {
       const escapedSql = escapeHtml(data.generated_sql);
-      const encodedSql = encodeURIComponent(data.generated_sql);
+      const safeEncodedSql = encodeURIComponent(data.generated_sql).replace(/'/g, '%27');
       contentHtml += `
         <div class="copilot-sql-card">
           <div class="sql-card-header">
@@ -991,10 +1171,10 @@
           </div>
           <div class="sql-card-code">${escapedSql}</div>
           <div class="sql-card-actions">
-            <button class="btn-sql-action btn-insert-sql" onclick="window.Studio.insertSql(decodeURIComponent('${encodedSql}'))">
+            <button class="btn-sql-action btn-insert-sql" data-sql="${escapedSql}" onclick="window.Studio.insertSql(decodeURIComponent('${safeEncodedSql}'))">
               <span>📝 填入查询</span>
             </button>
-            <button class="btn-sql-action btn-exec-sql" onclick="window.Studio.runSqlDirect(decodeURIComponent('${encodedSql}'))">
+            <button class="btn-sql-action btn-exec-sql" data-sql="${escapedSql}" onclick="window.Studio.runSqlDirect(decodeURIComponent('${safeEncodedSql}'))">
               <span>▶ 直接运行</span>
             </button>
           </div>
@@ -1018,6 +1198,74 @@
     }
   }
 
+  function renderMarkdownMini(md) {
+    if (!md) return '';
+    let text = md.trim();
+    // 移除生硬死板的模板大标题与重复的 SQL 代码块
+    text = text.replace(/^#+\s*(?:CortexDB|查询分析报告|核心结论|执行详情|数据分析报告|业务结论|查询结果)[^\n]*\n+/gim, '');
+    text = text.replace(/```sql[\s\S]*?```/gi, ''); // 移除重复的 SQL 代码块
+    text = text.replace(/^#+\s+/gm, ''); // 移除多余的 # 标题记号
+
+    // 彻底剥离任何 Markdown 表格结构 (如 | col1 | col2 |)
+    text = text.replace(/\|[^\n]+\|\n\|[-:\s|]+\|\n(?:\|[^\n]+\|\n*)+/g, '');
+    text = text.replace(/\|[^\n]+\|/g, '');
+
+    // 移除冗余废话提示
+    text = text.replace(/📋\s*查询结果[^\n]*/gi, '');
+    text = text.replace(/查询共返回\s*\d+\s*行记录[^\n]*/gi, '');
+    text = text.replace(/数据如下[：:]*/gi, '');
+    text = text.replace(/最终执行\s*SQL[：:]*[^\n]*/gi, '');
+
+    text = text.trim();
+
+    // 转义 HTML
+    let html = escapeHtml(text);
+
+    // 加粗 **text** -> <strong class="hl-bold">text</strong>
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong class="hl-bold">$1</strong>');
+
+    // 行内代码 `code` -> <code class="inline-code">code</code>
+    html = html.replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>');
+
+    // 换行与段落
+    const paragraphs = html.split(/\n{2,}/).filter(Boolean);
+    return paragraphs.map(p => `<p style="margin:4px 0 8px 0; line-height:1.6;">${p.replace(/\n/g, '<br>')}</p>`).join('');
+  }
+
+  function formatStepDescription(evt) {
+    const type = evt.event;
+    const data = evt.data || {};
+    switch (type) {
+      case 'agent.started':
+        return { text: '🚀 启动智能会话，正在构建内核执行图谱...', status: 'success' };
+      case 'intent.detected':
+        const intentNames = { query: '数据查询', diagnose: '慢查询诊断', optimize: '索引性能调优', explain: '执行计划分析', ddl: '表结构运维' };
+        return { text: `🎯 意图推断完成：${intentNames[data.intent] || data.intent} (置信度 ${(data.confidence * 100).toFixed(0)}%)`, status: 'success' };
+      case 'schema.retrieved':
+        return { text: '📚 召回当前数据库 Catalog 表结构与字段元数据', status: 'success' };
+      case 'sql.generated':
+        return { text: '⚙️ 初步生成数据操作 SQL 逻辑', status: 'success' };
+      case 'sql.validated':
+        if (data.valid) {
+          return { text: '✓ 数据库内核编译器前置质检 (Compiler Pre-check: PASS)', status: 'success' };
+        } else {
+          return { text: '⚠️ 编译器发现语法或字段偏差，触发自愈引擎...', status: 'warn' };
+        }
+      case 'sql.corrected':
+        return { text: `🔧 语法自愈修复成功 (重试 #${data.retry_count})：${data.root_cause || '消除字段或语法歧义'}`, status: 'warn' };
+      case 'analysis.completed':
+        return { text: '📊 收集 BufferPool 缓存指标与物理存储分析报告', status: 'success' };
+      case 'sql.executed':
+        return { text: `⚡ 物理引擎执行完毕，共命中 ${data.rows_count || 0} 行数据 (耗时: ${data.latency_ms || 0}ms)`, status: 'success' };
+      case 'approval.required':
+        return { text: `🛡️ 检测到数据删除/修改操作 (${data.statement_type || 'DML'})，已拦截物理执行并挂起等待用户确认`, status: 'warn' };
+      case 'clarification.required':
+        return { text: `❓ 目标表不明确或存在多表歧义，向用户发起追问澄清`, status: 'warn' };
+      default:
+        return { text: `• ${type}`, status: 'success' };
+    }
+  }
+
   async function handleSendCopilot(customQuery = null) {
     const query = (customQuery || copilotEl.input.value).trim();
     if (!query) return;
@@ -1028,26 +1276,293 @@
 
     toggleCopilot(true);
     appendUserMessage(query);
-    const loadingId = appendAgentLoading();
+
+    const msgId = 'msg-' + Date.now();
+    const msgEl = document.createElement('div');
+    msgEl.className = 'chat-msg agent';
+    msgEl.id = msgId;
+
+    msgEl.innerHTML = `
+      <div class="chat-bubble-agent">
+        <!-- 深度思考折叠容器 (DeepSeek 风格) -->
+        <div class="copilot-thinking-box thinking-active" id="thinking-${msgId}">
+          <div class="thinking-header" id="thinking-header-${msgId}">
+            <div class="thinking-status-left">
+              <span class="thinking-pulse-dot" id="thinking-dot-${msgId}"></span>
+              <span id="thinking-title-${msgId}">⚡ 深度思考中...</span>
+            </div>
+            <div class="thinking-meta-right">
+              <span class="thinking-time-badge" id="thinking-time-${msgId}">0.0s</span>
+              <svg class="thinking-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
+          <div class="thinking-body" id="thinking-body-${msgId}">
+            <div class="thinking-steps-list" id="thinking-steps-${msgId}"></div>
+            <div class="thinking-model-text" id="thinking-model-text-${msgId}" style="display:none;"></div>
+          </div>
+        </div>
+
+        <!-- 逐字打字机正文容器 -->
+        <div class="streaming-answer-text" id="answer-text-${msgId}">
+          <span class="typing-cursor" id="typing-cursor-${msgId}"></span>
+        </div>
+
+        <!-- 结构化 SQL 卡片占位 -->
+        <div class="sql-card-container" id="sql-card-container-${msgId}"></div>
+      </div>
+    `;
+
+    copilotEl.chatContainer.appendChild(msgEl);
+    copilotEl.chatContainer.scrollTop = copilotEl.chatContainer.scrollHeight;
+
+    // 思考卡片折叠/展开事件绑定
+    const thinkingBox = document.getElementById(`thinking-${msgId}`);
+    const thinkingHeader = document.getElementById(`thinking-header-${msgId}`);
+    if (thinkingHeader && thinkingBox) {
+      thinkingHeader.addEventListener('click', () => {
+        thinkingBox.classList.toggle('collapsed');
+      });
+    }
+
+    const tStart = performance.now();
+    let isThinkingDone = false;
+    const timerInterval = setInterval(() => {
+      if (isThinkingDone) {
+        clearInterval(timerInterval);
+        return;
+      }
+      const sec = ((performance.now() - tStart) / 1000).toFixed(1);
+      const timeBadge = document.getElementById(`thinking-time-${msgId}`);
+      if (timeBadge) timeBadge.textContent = `${sec}s`;
+    }, 100);
+
+    function markThinkingCompleted() {
+      if (isThinkingDone) return;
+      isThinkingDone = true;
+      clearInterval(timerInterval);
+      const totalSec = ((performance.now() - tStart) / 1000).toFixed(1);
+
+      const titleEl = document.getElementById(`thinking-title-${msgId}`);
+      const dotEl = document.getElementById(`thinking-dot-${msgId}`);
+      const timeBadge = document.getElementById(`thinking-time-${msgId}`);
+
+      if (titleEl) titleEl.textContent = '✓ 已深度思考';
+      if (dotEl) {
+        dotEl.classList.add('done');
+      }
+      if (timeBadge) timeBadge.textContent = `${totalSec}s`;
+      if (thinkingBox) {
+        thinkingBox.classList.remove('thinking-active');
+        // 推理完毕后，默认半收起，保持界面整洁优雅
+        thinkingBox.classList.add('collapsed');
+      }
+    }
+
+    const answerTextEl = document.getElementById(`answer-text-${msgId}`);
+    const cursorEl = document.getElementById(`typing-cursor-${msgId}`);
+    const stepsContainer = document.getElementById(`thinking-steps-${msgId}`);
+    const modelThoughtEl = document.getElementById(`thinking-model-text-${msgId}`);
+    const sqlCardContainer = document.getElementById(`sql-card-container-${msgId}`);
+
+    let fullAnswerText = '';
+    let hasAutoExecutedQuery = false;
 
     try {
-      const res = await apiPost('/api/agent/chat', {
-        query: query,
-        session_id: 'navicat_web_copilot'
+      const response = await fetch('/api/agent/stream', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: query,
+          session_id: 'navicat_web_copilot'
+        })
       });
 
-      const loadingElem = document.getElementById(loadingId);
-      if (loadingElem) loadingElem.remove();
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
 
-      appendAgentResponse(res);
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder('utf-8');
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop(); // 保留未完整的最后一行
+
+        let currentEvent = 'message';
+        for (let line of lines) {
+          line = line.trim();
+          if (!line) continue;
+
+          if (line.startsWith('event:')) {
+            currentEvent = line.substring(6).trim();
+            continue;
+          }
+
+          if (line.startsWith('data:')) {
+            const jsonStr = line.substring(5).trim();
+            let parsedData = {};
+            try {
+              parsedData = JSON.parse(jsonStr);
+            } catch (e) {
+              continue;
+            }
+
+            if (currentEvent === 'step') {
+              const stepInfo = formatStepDescription(parsedData);
+              const stepRow = document.createElement('div');
+              stepRow.className = `trace-step ${stepInfo.status}`;
+              stepRow.style.padding = '2px 0';
+              stepRow.innerHTML = `
+                <span class="step-icon">${stepInfo.status === 'warn' ? '⚠️' : '✓'}</span>
+                <span class="step-name">${escapeHtml(stepInfo.text)}</span>
+              `;
+              if (stepsContainer) {
+                stepsContainer.appendChild(stepRow);
+                copilotEl.chatContainer.scrollTop = copilotEl.chatContainer.scrollHeight;
+              }
+
+              // 【核心响应前移】：当物理引擎执行完毕 (sql.executed) 时，立刻将 SQL 填入查询栏并刷新数据网格！
+              const stepEvt = parsedData.event;
+              const stepData = parsedData.data || {};
+              if (stepEvt === 'sql.executed' && stepData.sql && !hasAutoExecutedQuery) {
+                const sText = stepData.sql.trim();
+                if (/^SELECT\b/i.test(sText)) {
+                  hasAutoExecutedQuery = true;
+                  // 立即自动填入当前活跃或新建的查询窗口
+                  window.Studio.insertSql(sText);
+                  // 立即执行并在左侧网格呈现真实数据
+                  setTimeout(() => {
+                    executeCurrentQuery();
+                  }, 20);
+                }
+              }
+            } else if (currentEvent === 'model_thought') {
+              if (modelThoughtEl && parsedData.thought) {
+                modelThoughtEl.style.display = 'block';
+                modelThoughtEl.textContent = parsedData.thought;
+              }
+            } else if (currentEvent === 'token') {
+              markThinkingCompleted();
+              const token = parsedData.token || '';
+              fullAnswerText += token;
+              // 在打字光标前插入文字
+              if (cursorEl) {
+                cursorEl.insertAdjacentText('beforebegin', token);
+              } else if (answerTextEl) {
+                answerTextEl.textContent = fullAnswerText;
+              }
+              copilotEl.chatContainer.scrollTop = copilotEl.chatContainer.scrollHeight;
+            } else if (currentEvent === 'done') {
+              markThinkingCompleted();
+              if (cursorEl) cursorEl.remove();
+
+              // 精简并美化核心结论自然语言（移除生硬死板的 MD 大标题与重复 SQL）
+              if (answerTextEl && fullAnswerText) {
+                answerTextEl.innerHTML = renderMarkdownMini(fullAnswerText);
+              }
+
+              // 处理生成的 SQL
+              if (parsedData.generated_sql && sqlCardContainer) {
+                const sqlText = parsedData.generated_sql.trim();
+                const sqlUpper = sqlText.toUpperCase();
+                const isDangerous = /^(DELETE|DROP|TRUNCATE|UPDATE|ALTER)\b/.test(sqlUpper);
+
+                if (isDangerous || parsedData.approval_required) {
+                  // 1) 危险/删除/变更操作：严禁自动运行！必须在面板上展示高危警示，需要用户确认
+                  const escapedSql = escapeHtml(sqlText);
+                  const safeEncodedSql = encodeURIComponent(sqlText).replace(/'/g, '%27');
+                  sqlCardContainer.innerHTML = `
+                    <div class="copilot-sql-card dangerous-card">
+                      <div class="sql-card-header dangerous-header">
+                        <span style="color:#fb7185; font-weight:600;">⚠️ 包含数据删除或结构修改操作</span>
+                        <span style="color:#fda4af; font-size:10.5px;">需人工确认</span>
+                      </div>
+                      <div class="sql-card-code" style="color:#fca5a5; background:#1c1015;">${escapedSql}</div>
+                      <div class="sql-card-actions">
+                        <button class="btn-sql-action btn-insert-sql" data-sql="${escapedSql}" onclick="window.Studio.insertSql(decodeURIComponent('${safeEncodedSql}'))">
+                          <span>📝 仅填入编辑器</span>
+                        </button>
+                        <button class="btn-sql-action btn-danger-confirm" data-sql="${escapedSql}" onclick="if(confirm('⚠️ 警告：该操作将物理删除/修改数据，操作不可撤销！确定要继续执行吗？')){ window.Studio.runSqlDirect(decodeURIComponent('${safeEncodedSql}')); }">
+                          <span>⚡ 确认并执行变更</span>
+                        </button>
+                      </div>
+                    </div>
+                  `;
+                } else if (/^SELECT\b/.test(sqlUpper)) {
+                  // 2) 能够查询的 SQL 语句：若此前在 thinking 阶段未触发，则在此兜底执行
+                  if (!hasAutoExecutedQuery) {
+                    hasAutoExecutedQuery = true;
+                    insertSqlToEditor(sqlText);
+                    setTimeout(() => {
+                      executeCurrentQuery();
+                    }, 50);
+                  }
+
+                  sqlCardContainer.innerHTML = `
+                    <div class="auto-executed-pill">
+                      <span class="pill-check">✓</span>
+                      <span>已实时填入查询窗口并为您运行查询，真实数据已在左侧网格呈现</span>
+                    </div>
+                  `;
+                } else {
+                  // 其他非查询语句 (如 CREATE INDEX, SHOW 等)
+                  const escapedSql = escapeHtml(sqlText);
+                  const safeEncodedSql = encodeURIComponent(sqlText).replace(/'/g, '%27');
+                  sqlCardContainer.innerHTML = `
+                    <div class="copilot-sql-card">
+                      <div class="sql-card-header">
+                        <span>生成 SQL 语句</span>
+                        <span>DataSphere Dialect</span>
+                      </div>
+                      <div class="sql-card-code">${escapedSql}</div>
+                      <div class="sql-card-actions">
+                        <button class="btn-sql-action btn-insert-sql" data-sql="${escapedSql}" onclick="window.Studio.insertSql(decodeURIComponent('${safeEncodedSql}'))">
+                          <span>📝 填入查询</span>
+                        </button>
+                        <button class="btn-sql-action btn-exec-sql" data-sql="${escapedSql}" onclick="window.Studio.runSqlDirect(decodeURIComponent('${safeEncodedSql}'))">
+                          <span>▶ 直接运行</span>
+                        </button>
+                      </div>
+                    </div>
+                  `;
+                }
+              }
+
+              // 处理管理员审批流
+              if (parsedData.approval_required && parsedData.approval_request_id) {
+                currentPendingApprovalId = parsedData.approval_request_id;
+                copilotEl.approvalDesc.textContent = `${parsedData.generated_sql} [单号: ${currentPendingApprovalId}]`;
+                copilotEl.approvalBanner.classList.remove('hidden');
+              }
+
+              copilotEl.chatContainer.scrollTop = copilotEl.chatContainer.scrollHeight;
+            } else if (currentEvent === 'error') {
+              markThinkingCompleted();
+              if (cursorEl) cursorEl.remove();
+              if (answerTextEl) {
+                answerTextEl.innerHTML += `<div style="color:#fb7185; margin-top:6px;">⚠️ 处理错误: ${escapeHtml(parsedData.error || '未知错误')}</div>`;
+              }
+            }
+          }
+        }
+      }
+
+      markThinkingCompleted();
+      if (cursorEl) cursorEl.remove();
+
     } catch (err) {
-      const loadingElem = document.getElementById(loadingId);
-      if (loadingElem) loadingElem.remove();
-
-      const errMsg = document.createElement('div');
-      errMsg.className = 'chat-msg agent';
-      errMsg.innerHTML = `<div class="chat-bubble-agent" style="color:#fb7185;">请求 Copilot 失败: ${escapeHtml(err.message)}</div>`;
-      copilotEl.chatContainer.appendChild(errMsg);
+      markThinkingCompleted();
+      if (cursorEl) cursorEl.remove();
+      if (answerTextEl) {
+        answerTextEl.innerHTML = `<div style="color:#fb7185;">请求 Copilot 流式服务失败: ${escapeHtml(err.message)}</div>`;
+      }
     }
   }
 
@@ -1059,10 +1574,43 @@
   el.btnNewQuery.addEventListener('click', () => createNewQueryTab());
   el.btnTabPlus.addEventListener('click', () => createNewQueryTab());
 
-  el.btnRefreshAll.addEventListener('click', () => {
-    refreshDatabaseMeta();
-    el.footerExecStats.textContent = '数据库对象树已刷新';
+  el.btnRefreshAll.addEventListener('click', async () => {
+    el.btnRefreshAll.classList.add('rotating');
+    el.footerExecStats.textContent = '正在刷新数据库对象树与元数据...';
+    try {
+      await refreshDatabaseMeta();
+      const curTab = state.tabs.find(t => t.id === state.activeTabId);
+      if (curTab && curTab.type === 'table_data') {
+        await loadTableData(curTab);
+      } else if (curTab && curTab.type === 'table_schema') {
+        await loadTableSchema(curTab);
+      }
+      el.footerExecStats.textContent = '数据库对象树与工作区数据已成功刷新';
+    } catch (e) {
+      console.error(e);
+      el.footerExecStats.textContent = '刷新异常: ' + e.message;
+    } finally {
+      setTimeout(() => el.btnRefreshAll.classList.remove('rotating'), 600);
+    }
   });
+
+  if (el.headerDbSelect) {
+    el.headerDbSelect.addEventListener('change', async (e) => {
+      const targetDb = e.target.value;
+      if (!targetDb || targetDb === state.currentDatabase) return;
+      try {
+        const res = await apiPost('/api/database/switch', { database: targetDb });
+        if (res.success) {
+          state.currentDatabase = res.current_database;
+          await refreshDatabaseMeta();
+          el.footerExecStats.textContent = `已切换至数据库: ${state.currentDatabase}`;
+        }
+      } catch (err) {
+        alert("切换数据库失败: " + err.message);
+        renderDatabaseSelect();
+      }
+    });
+  }
 
   el.btnSeedDemo.addEventListener('click', async () => {
     if (confirm("确定载入演示数据库吗？将初始化 departments、employees、products、orders 等丰富示例表。")) {
@@ -1101,6 +1649,38 @@
     });
   }
 
+  // Copilot 对话框内按钮全局事件代理 (填入查询 / 直接运行 / 危险操作确认)
+  if (copilotEl.chatContainer) {
+    copilotEl.chatContainer.addEventListener('click', (e) => {
+      const insertBtn = e.target.closest('.btn-insert-sql');
+      if (insertBtn) {
+        const sql = insertBtn.getAttribute('data-sql');
+        if (sql) {
+          insertSqlToEditor(sql);
+        }
+        return;
+      }
+
+      const execBtn = e.target.closest('.btn-exec-sql');
+      if (execBtn) {
+        const sql = execBtn.getAttribute('data-sql');
+        if (sql) {
+          runSqlDirectly(sql);
+        }
+        return;
+      }
+
+      const dangerConfirmBtn = e.target.closest('.btn-danger-confirm');
+      if (dangerConfirmBtn) {
+        const sql = dangerConfirmBtn.getAttribute('data-sql');
+        if (sql && confirm('⚠️ 警告：该操作将物理删除/修改数据，操作不可撤销！确定要继续执行吗？')) {
+          runSqlDirectly(sql);
+        }
+        return;
+      }
+    });
+  }
+
   // 快速体验 prompt chip 点击
   document.querySelectorAll('.prompt-chip').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -1118,10 +1698,14 @@
       try {
         const res = await apiPost('/api/agent/approve', { request_id: currentPendingApprovalId });
         copilotEl.approvalBanner.classList.add('hidden');
-        alert("✓ 审批通过并已成功执行变更！");
+        alert("✓ 审批通过并已成功执行物理变更！");
         await refreshDatabaseMeta();
+        const activeTab = tabs.find(t => t.id === activeTabId);
+        if (activeTab && activeTab.type === 'table_data') {
+          await refreshTableData(activeTab.tableName);
+        }
         appendAgentResponse({
-          answer: "✓ 管理员人工审批已通过，已完成底层数据库 DDL/运维变更执行。",
+          answer: "✓ 管理员人工审批已通过，已完成底层数据库变更物理执行。",
           execution_result: res.result
         });
       } catch (e) {

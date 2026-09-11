@@ -297,6 +297,14 @@ class SemanticAnalyzer:
             return self._analyze_drop_index(ast_node)
         elif node_type == "ShowTablesNode":
             return "[语义正确] 列出所有数据表"
+        elif node_type == "ShowDatabasesNode":
+            return "[语义正确] 列出所有数据库"
+        elif node_type == "CreateDatabaseNode":
+            return f"[语义正确] 创建数据库 {ast_node.db_name}"
+        elif node_type == "DropDatabaseNode":
+            return f"[语义正确] 删除数据库 {ast_node.db_name}"
+        elif node_type == "UseDatabaseNode":
+            return f"[语义正确] 切换至数据库 {ast_node.db_name}"
         elif node_type == "DescribeTableNode":
             return self._analyze_describe_table(ast_node)
         elif node_type == "InsertNode":
@@ -578,15 +586,24 @@ class SemanticAnalyzer:
 
         # 3) 分组规则
         gb = getattr(node, "group_by", None)
+        gb_cols = getattr(node, "group_by_cols", None) or ([gb] if gb else [])
         if aggregates:
-            if gb:
-                self._check_qualified_or_unqualified_col(alias_map, gb)
-                gb_norm = _normalize_ident(gb)
+            if gb_cols:
+                for g in gb_cols:
+                    self._check_qualified_or_unqualified_col(alias_map, g)
+                gb_norms = [_normalize_ident(g) for g in gb_cols]
                 for c in plain_cols:
                     if c == "*":
                         raise Exception("[语义错误] 聚合查询中不支持 SELECT *（请改为明确列或仅使用聚合函数）")
-                    if _normalize_ident(c) != gb_norm:
-                        raise Exception(f"[语义错误] 非分组列 '{c}' 必须出现在 GROUP BY 中（当前仅支持单列分组 '{gb}'）")
+                    if _normalize_ident(c) not in gb_norms:
+                        raise Exception(f"[语义错误] 非分组列 '{c}' 必须出现在 GROUP BY 中")
+                # 自动将主分组列对齐到 SELECT 中出现的列，保证底层执行引擎正确取值
+                for c in plain_cols:
+                    c_norm = _normalize_ident(c)
+                    for g in gb_cols:
+                        if _normalize_ident(g) == c_norm:
+                            node.group_by = g
+                            break
             else:
                 non_star_plain = [c for c in plain_cols if c != "*"]
                 if non_star_plain:

@@ -52,6 +52,21 @@ class GraphNodes:
                 return m.get("content", "")
         return ""
 
+    def _get_conversation_context(self, state: CortexAgentState, max_turns: int = 6) -> str:
+        messages = state.get("messages", [])
+        if not messages or len(messages) <= 1:
+            return "无前序对话上下文"
+
+        history_msgs = messages[-max_turns:]
+        lines = []
+        for m in history_msgs:
+            role = "用户" if m.get("role") == "user" else "助手"
+            content = m.get("content", "").strip()
+            if len(content) > 300:
+                content = content[:300] + "...(截断)"
+            lines.append(f"【{role}】: {content}")
+        return "\n".join(lines)
+
     # 1. context_node
     def context_node(self, state: CortexAgentState) -> Dict[str, Any]:
         task_id = state.get("request_id") or f"req_{int(time.time() * 1000)}"
@@ -94,8 +109,9 @@ class GraphNodes:
     def intent_router_node(self, state: CortexAgentState) -> Dict[str, Any]:
         task_id = state.get("request_id", "")
         user_query = self._get_user_query(state)
+        conversation_context = self._get_conversation_context(state)
 
-        route_res = self.supervisor.route(user_query)
+        route_res = self.supervisor.route(user_query, conversation_context=conversation_context)
         intent = route_res.get("intent", "query")
 
         self.event_bus.publish_sync(
@@ -130,8 +146,30 @@ class GraphNodes:
         user_query = self._get_user_query(state)
         schema_summary = state.get("schema_summary", "")
         memories = json.dumps(state.get("memories", []), ensure_ascii=False)
+        conversation_context = self._get_conversation_context(state)
 
-        gen_res = self.sql_agent.generate(user_query, schema_summary, memories)
+        gen_res = self.sql_agent.generate(
+            user_query,
+            schema_summary,
+            memories,
+            conversation_context=conversation_context
+        )
+        if gen_res.get("needs_clarification"):
+            clarification_q = gen_res.get("clarification_question") or "您的需求涉及多个可能的数据表或缺少关键信息，请问您具体指的是哪张表的数据？"
+            self.event_bus.publish_sync(
+                EventType.CLARIFICATION_REQUIRED,
+                task_id=task_id,
+                data={
+                    "reason": gen_res.get("explanation", "需求模糊，涉及多个候选表"),
+                    "question": clarification_q
+                }
+            )
+            return {
+                "needs_clarification": True,
+                "clarification_question": clarification_q,
+                "generated_sql": None
+            }
+
         sql = gen_res.get("sql", "").strip()
 
         self.event_bus.publish_sync(
@@ -141,6 +179,7 @@ class GraphNodes:
         )
 
         return {
+            "needs_clarification": False,
             "generated_sql": sql
         }
 
@@ -199,6 +238,9 @@ class GraphNodes:
 
     # 8. safety_guard_node
     def safety_guard_node(self, state: CortexAgentState) -> Dict[str, Any]:
+        if state.get("needs_clarification"):
+            return {"approval_required": False}
+
         sql = state.get("generated_sql")
         if not sql:
             return {"approval_required": False}
@@ -209,9 +251,21 @@ class GraphNodes:
 
         if not decision.allowed:
             if decision.action == "REQUIRE_APPROVAL":
+                req_id = decision.approval_request.request_id if decision.approval_request else None
+                self.event_bus.publish_sync(
+                    EventType.APPROVAL_REQUIRED,
+                    task_id=task_id,
+                    data={
+                        "sql": sql,
+                        "statement_type": decision.risk.statement_type,
+                        "risk_level": decision.risk.risk_level.value,
+                        "reason": decision.reason,
+                        "approval_request_id": req_id
+                    }
+                )
                 return {
                     "approval_required": True,
-                    "approval_request_id": decision.approval_request.request_id if decision.approval_request else None,
+                    "approval_request_id": req_id,
                     "risk_level": decision.risk.risk_level.value
                 }
             else:
@@ -233,6 +287,9 @@ class GraphNodes:
     # 9. compiler_check_node
     def compiler_check_node(self, state: CortexAgentState) -> Dict[str, Any]:
         task_id = state.get("request_id", "")
+        if state.get("needs_clarification"):
+            return {"validation": {"valid": True, "message": "需求待澄清，暂无需校验 SQL"}}
+
         sql = state.get("generated_sql")
 
         # 若此前已被安全防火墙拒绝，直接透传错误
@@ -316,15 +373,28 @@ class GraphNodes:
         if not sql:
             return {}
 
+        # 核心红线门禁：若已被标记为需要审批/确认，物理引擎严禁提前执行
+        if state.get("approval_required"):
+            return {}
+
+        # 核心防线：对 DELETE/DROP/TRUNCATE/UPDATE/ALTER 等破坏性操作，绝不隐式自动物理执行
+        sql_upper = sql.strip().upper()
+        if any(sql_upper.startswith(kw) for kw in ("DELETE", "DROP", "TRUNCATE", "UPDATE", "ALTER")):
+            # 必须等待前端用户明确点击“确认执行”或通过 /approve 审批单触发
+            return {}
+
         exec_res = self.adapter.execute(sql)
 
         self.event_bus.publish_sync(
             EventType.SQL_EXECUTED,
             task_id=task_id,
             data={
+                "sql": sql,
                 "success": exec_res.get("success"),
                 "rows_count": len(exec_res.get("data", [])),
-                "latency_ms": exec_res.get("latency_ms")
+                "latency_ms": exec_res.get("latency_ms"),
+                "columns": exec_res.get("columns", []),
+                "data": exec_res.get("data", [])
             }
         )
 
@@ -365,6 +435,21 @@ class GraphNodes:
         sql = state.get("generated_sql", "")
         val = state.get("validation", {})
         val_status = "通过" if val.get("valid") else f"未通过 ({val.get('error_message', '')})"
+
+        # 0. 优先处理需求歧义追问澄清
+        if state.get("needs_clarification"):
+            clarification_q = state.get("clarification_question") or "您提出的需求涉及多张可能的数据表或目标未明确，请问您具体指的是哪张表中的数据？"
+            answer = (
+                f"❓ **需求待明确澄清 (Ambiguous Request)**\n\n"
+                f"{clarification_q}\n\n"
+                f"> 💡 **提示**：您可以直接回复目标表名（例如回复：`雇员表 (employees)` 或 `学生表 (student)`），我将立即为您继续安全处理。"
+            )
+            self.event_bus.publish_sync(
+                EventType.AGENT_COMPLETED,
+                task_id=task_id,
+                data={"final_answer_length": len(answer)}
+            )
+            return {"final_answer": answer}
 
         # 检查是否等待人工审批
         if state.get("approval_required"):

@@ -48,10 +48,10 @@ class AnalystAgent:
         if execution_result:
             latency = execution_result.get("latency_ms", 0.0)
             if execution_result.get("success"):
-                cols = execution_result.get("columns", [])
                 rows = execution_result.get("data", [])
-                table_md = self.format_table_markdown(cols, rows)
-                exec_summary = f"执行成功，返回 {len(rows)} 行记录：\n\n{table_md}"
+                cols = execution_result.get("columns", [])
+                sample = rows[:2] if rows else []
+                exec_summary = f"执行成功，返回 {len(rows)} 行记录。涉及字段: {cols}。样本数据: {sample}"
             else:
                 exec_summary = f"执行失败: {execution_result.get('error', '未知错误')}"
         else:
@@ -75,7 +75,7 @@ class AnalystAgent:
 
         messages = [
             ChatMessage(role="system", content=filled_prompt),
-            ChatMessage(role="user", content="请根据以上信息输出最终面向用户的精美 Markdown 报告。")
+            ChatMessage(role="user", content="请直接给出简明扼要的核心业务结论，不需要重复输出 SQL 语句，不使用多级大标题报告模板。")
         ]
 
         resp = self.model_client.chat(messages, tier=ModelTier.FAST)

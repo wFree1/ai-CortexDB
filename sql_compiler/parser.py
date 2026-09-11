@@ -64,6 +64,7 @@ class SelectNode(ASTNode):
         self.joins: List[Tuple[str, Optional[str], str, str]] = []
         self.where_condition: Optional[str] = None
         self.group_by: Optional[str] = None
+        self.group_by_cols: List[str] = []
         self.having: Optional[str] = having
         self.order_by: Optional[str] = None
         self.order_direction: Optional[str] = None
@@ -174,6 +175,43 @@ class ShowTablesNode(ASTNode):
 
     def __repr__(self):
         return "ShowTablesNode()"
+
+
+class CreateDatabaseNode(ASTNode):
+    def __init__(self, db_name: str, if_not_exists: bool = False, pos: Optional[int] = None):
+        self.db_name = db_name
+        self.if_not_exists = if_not_exists
+        self.pos = pos
+
+    def __repr__(self):
+        return f"CreateDatabaseNode({self.db_name}, if_not_exists={self.if_not_exists})"
+
+
+class DropDatabaseNode(ASTNode):
+    def __init__(self, db_name: str, if_exists: bool = False, pos: Optional[int] = None):
+        self.db_name = db_name
+        self.if_exists = if_exists
+        self.pos = pos
+
+    def __repr__(self):
+        return f"DropDatabaseNode({self.db_name}, if_exists={self.if_exists})"
+
+
+class UseDatabaseNode(ASTNode):
+    def __init__(self, db_name: str, pos: Optional[int] = None):
+        self.db_name = db_name
+        self.pos = pos
+
+    def __repr__(self):
+        return f"UseDatabaseNode({self.db_name})"
+
+
+class ShowDatabasesNode(ASTNode):
+    def __init__(self, pos: Optional[int] = None):
+        self.pos = pos
+
+    def __repr__(self):
+        return "ShowDatabasesNode()"
 
 
 class DescribeTableNode(ASTNode):
@@ -513,18 +551,26 @@ class Parser:
             nxt = self.peek_token(1)
             if nxt and str(nxt.value).upper() == "INDEX":
                 return self.parse_create_index()
+            if nxt and str(nxt.value).upper() == "DATABASE":
+                return self.parse_create_database()
             return self.parse_create_table()
         if kw == "DROP":
             nxt = self.peek_token(1)
             if nxt and str(nxt.value).upper() == "INDEX":
                 return self.parse_drop_index()
+            if nxt and str(nxt.value).upper() == "DATABASE":
+                return self.parse_drop_database()
             return self.parse_drop_table()
+        if kw == "USE":
+            return self.parse_use_database()
         if kw == "ALTER":
             return self.parse_alter_table()
         if kw == "TRUNCATE":
             return self.parse_truncate_table()
         if kw == "SHOW":
             nxt = self.peek_token(1)
+            if nxt and str(nxt.value).upper() in ("DATABASES", "DATABASE"):
+                return self.parse_show_databases()
             if nxt and str(nxt.value).upper() in ("TABLES", "TABLE"):
                 return self.parse_show_tables()
             elif nxt and str(nxt.value).upper() in ("COLUMNS", "COLUMN"):
@@ -649,6 +695,53 @@ class Parser:
             tbl_name = str(self.consume("IDENTIFIER").value)
         self.consume(";")
         return DropIndexNode(str(idx_tok.value), tbl_name, if_exists=if_exists, pos=idx_tok.line)
+
+    # ---------------- CREATE DATABASE ----------------
+    def parse_create_database(self) -> CreateDatabaseNode:
+        self.consume("CREATE")
+        self.consume("DATABASE")
+        if_not_exists = False
+        if self.current_token() and str(self.current_token().value).upper() == "IF":
+            self.consume("IF")
+            self.consume("NOT")
+            self.consume("EXISTS")
+            if_not_exists = True
+        db_tok = self.consume("IDENTIFIER")
+        if self.current_token() and str(self.current_token().value) == ";":
+            self.consume(";")
+        return CreateDatabaseNode(str(db_tok.value), if_not_exists=if_not_exists, pos=db_tok.line)
+
+    # ---------------- DROP DATABASE ----------------
+    def parse_drop_database(self) -> DropDatabaseNode:
+        self.consume("DROP")
+        self.consume("DATABASE")
+        if_exists = False
+        if self.current_token() and str(self.current_token().value).upper() == "IF":
+            self.consume("IF")
+            self.consume("EXISTS")
+            if_exists = True
+        db_tok = self.consume("IDENTIFIER")
+        if self.current_token() and str(self.current_token().value) == ";":
+            self.consume(";")
+        return DropDatabaseNode(str(db_tok.value), if_exists=if_exists, pos=db_tok.line)
+
+    # ---------------- USE DATABASE ----------------
+    def parse_use_database(self) -> UseDatabaseNode:
+        self.consume("USE")
+        if self.current_token() and str(self.current_token().value).upper() == "DATABASE":
+            self.consume("DATABASE")
+        db_tok = self.consume("IDENTIFIER")
+        if self.current_token() and str(self.current_token().value) == ";":
+            self.consume(";")
+        return UseDatabaseNode(str(db_tok.value), pos=db_tok.line)
+
+    # ---------------- SHOW DATABASES ----------------
+    def parse_show_databases(self) -> ShowDatabasesNode:
+        self.consume("SHOW")
+        self.consume()  # DATABASES or DATABASE
+        if self.current_token() and str(self.current_token().value) == ";":
+            self.consume(";")
+        return ShowDatabasesNode()
 
     # ---------------- SHOW TABLES ----------------
     def parse_show_tables(self) -> ShowTablesNode:
@@ -963,10 +1056,16 @@ class Parser:
             where_condition = self._parse_bool_expr_sql()
 
         group_by = None
+        group_by_cols = []
         if self.current_token() and str(self.current_token().value).upper() == "GROUP":
             self.consume("GROUP")
             self.consume("BY")
-            group_by = parse_column_ref()
+            first_gb = parse_column_ref()
+            group_by_cols.append(first_gb)
+            while self.current_token() and self.current_token().value == ",":
+                self.consume(",")
+                group_by_cols.append(parse_column_ref())
+            group_by = group_by_cols[0]
 
         having = None
         if self.current_token() and str(self.current_token().value).upper() == "HAVING":
@@ -981,6 +1080,11 @@ class Parser:
             order_by = parse_column_ref()
             if self.current_token() and str(self.current_token().value).upper() in ("ASC", "DESC"):
                 order_direction = self.consume().value.upper()
+            while self.current_token() and self.current_token().value == ",":
+                self.consume(",")
+                _extra_ob = parse_column_ref()
+                if self.current_token() and str(self.current_token().value).upper() in ("ASC", "DESC"):
+                    self.consume()
 
         limit = None
         offset = None
@@ -1005,6 +1109,7 @@ class Parser:
         node.joins = joins
         node.where_condition = where_condition
         node.group_by = group_by
+        node.group_by_cols = group_by_cols
         node.order_by = order_by
         node.order_direction = order_direction
         return node
@@ -1025,6 +1130,23 @@ class Parser:
             t = self.current_token()
             if not t:
                 raise Exception(self._format_err("Value", None))
+
+            # 支持聚合函数或标量函数: AVG(e.salary), COUNT(*), SUM(...)
+            AGG_FUNCS = {"COUNT", "SUM", "AVG", "MAX", "MIN", "ROUND", "ABS", "UPPER", "LOWER", "LENGTH"}
+            if t and isinstance(t.value, str) and t.value.upper() in AGG_FUNCS and (self.pos + 1 < len(self.tokens)) and self.tokens[self.pos + 1].value == "(":
+                fn_name = str(self.consume().value).upper()
+                self.consume("(")
+                if fn_name == "COUNT" and self.current_token() and self.current_token().value == "*":
+                    self.consume("*")
+                    self.consume(")")
+                    return "COUNT(*)"
+                arg_sql = parse_value_sql()
+                while self.current_token() and self.current_token().value == ",":
+                    self.consume(",")
+                    arg_sql += f", {parse_value_sql()}"
+                self.consume(")")
+                return f"{fn_name}({arg_sql})"
+
             if getattr(t, "type", "") == "IDENTIFIER":
                 if (self.pos + 1) < len(self.tokens) and self.tokens[self.pos + 1].value == ".":
                     return parse_column_ref()

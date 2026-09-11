@@ -16,6 +16,9 @@ class CortexAgentState(TypedDict, total=False):
     memories: List[Dict[str, Any]]
 
     generated_sql: Optional[str]
+    needs_clarification: bool
+    clarification_question: Optional[str]
+    clarification_reason: Optional[str]
 
     validation: Optional[Dict[str, Any]]
 

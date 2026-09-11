@@ -2,6 +2,8 @@
 import os
 import time
 import re
+import json
+import shutil
 from io import StringIO
 from contextlib import redirect_stdout
 from dataclasses import dataclass, field
@@ -114,6 +116,7 @@ class ExecutionResult:
     smart_hints: List[str] = field(default_factory=list)
     compilation_log: List[str] = field(default_factory=list)
     execution_time_ms: float = 0.0
+    current_database: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -127,6 +130,7 @@ class ExecutionResult:
             "error_type": self.error_type,
             "smart_hints": self.smart_hints,
             "execution_time_ms": self.execution_time_ms,
+            "current_database": self.current_database,
         }
 
 
@@ -143,11 +147,97 @@ class DataSphereDB:
         os.makedirs(self.data_dir, exist_ok=True)
         os.makedirs(self.log_dir, exist_ok=True)
 
+        self.databases_dir = os.path.join(self.data_dir, 'databases')
+        os.makedirs(self.databases_dir, exist_ok=True)
+        self.current_database = 'datasphere'
+
         self.file_manager = FileManager(data_dir=self.data_dir)
         self.catalog = Catalog(data_dir=self.data_dir, buffer_pool=self.file_manager.buffer_pool)
-        self.executor = Executor(self.file_manager, self.catalog)
+        self.executor = Executor(self.file_manager, self.catalog, db=self)
         self.semantic_analyzer = SemanticAnalyzer(self.catalog)
         self.planner = Planner()
+
+    def _get_database_path(self, db_name: str) -> str:
+        if db_name == 'datasphere':
+            return self.data_dir
+        return os.path.join(self.databases_dir, db_name)
+
+    def list_databases(self) -> List[str]:
+        """返回所有可用数据库列表"""
+        dbs = ['datasphere']
+        if os.path.exists(self.databases_dir):
+            for entry in sorted(os.listdir(self.databases_dir)):
+                full_path = os.path.join(self.databases_dir, entry)
+                if os.path.isdir(full_path) and entry not in dbs:
+                    dbs.append(entry)
+        return dbs
+
+    def create_database(self, db_name: str, if_not_exists: bool = False) -> str:
+        """创建全新独立的数据库存储目录与元数据"""
+        db_name = db_name.strip()
+        if not re.match(r'^[A-Za-z0-9_]+$', db_name):
+            raise SemanticError(f"Invalid database name '{db_name}'. Only alphanumeric characters and underscores are allowed.")
+
+        existing = self.list_databases()
+        if db_name in existing:
+            if if_not_exists:
+                return f"Database '{db_name}' already exists (IF NOT EXISTS skipped)."
+            raise SemanticError(f"Database '{db_name}' already exists.")
+
+        db_path = self._get_database_path(db_name)
+        os.makedirs(db_path, exist_ok=True)
+        with open(os.path.join(db_path, 'catalog.json'), 'w', encoding='utf-8') as f:
+            json.dump({}, f, indent=2)
+        with open(os.path.join(db_path, 'index_roots.json'), 'w', encoding='utf-8') as f:
+            json.dump({}, f, indent=2)
+        with open(os.path.join(db_path, 'table_files.json'), 'w', encoding='utf-8') as f:
+            json.dump({}, f, indent=2)
+        return f"Database '{db_name}' created successfully."
+
+    def drop_database(self, db_name: str, if_exists: bool = False) -> str:
+        """安全删除指定数据库目录"""
+        db_name = db_name.strip()
+        if db_name == 'datasphere':
+            raise SemanticError("Cannot drop default system database 'datasphere'.")
+
+        existing = self.list_databases()
+        if db_name not in existing:
+            if if_exists:
+                return f"Database '{db_name}' does not exist (IF EXISTS skipped)."
+            raise SemanticError(f"Database '{db_name}' does not exist.")
+
+        # 若删除当前库，先平稳切回 datasphere
+        if self.current_database == db_name:
+            self.use_database('datasphere')
+
+        db_path = self._get_database_path(db_name)
+        if os.path.exists(db_path):
+            shutil.rmtree(db_path, ignore_errors=True)
+        return f"Database '{db_name}' dropped successfully."
+
+    def use_database(self, db_name: str) -> str:
+        """运行时动态切换当前激活的工作数据库"""
+        db_name = db_name.strip()
+        existing = self.list_databases()
+        if db_name not in existing:
+            raise SemanticError(f"Unknown database '{db_name}'.")
+
+        if self.current_database == db_name:
+            return f"Database changed to '{db_name}'."
+
+        # 1. 刷盘并关闭旧库表空间
+        if hasattr(self.file_manager, "close"):
+            self.file_manager.close()
+
+        # 2. 挂载新库
+        new_path = self._get_database_path(db_name)
+        os.makedirs(new_path, exist_ok=True)
+        self.file_manager = FileManager(data_dir=new_path)
+        self.catalog = Catalog(data_dir=new_path, buffer_pool=self.file_manager.buffer_pool)
+        self.executor = Executor(self.file_manager, self.catalog, db=self)
+        self.semantic_analyzer = SemanticAnalyzer(self.catalog)
+        self.current_database = db_name
+        return f"Database changed to '{db_name}'."
 
     def execute(self, sql: str, actually_execute: bool = True) -> ExecutionResult:
         """
@@ -159,7 +249,7 @@ class DataSphereDB:
         """
         stmt = sql.strip()
         if not stmt:
-            return ExecutionResult(sql=sql, success=True, message="Empty statement.")
+            return ExecutionResult(sql=sql, success=True, message="Empty statement.", current_database=self.current_database)
 
         start_time = time.perf_counter()
         log_lines = [f"SQL 语句: {stmt}"]
@@ -246,6 +336,7 @@ class DataSphereDB:
                 explain_text=explain_text,
                 compilation_log=log_lines,
                 execution_time_ms=elapsed_ms,
+                current_database=self.current_database,
             )
 
         except Exception as e:
@@ -273,6 +364,7 @@ class DataSphereDB:
                 smart_hints=hints,
                 compilation_log=log_lines,
                 execution_time_ms=elapsed_ms,
+                current_database=self.current_database,
             )
 
     def validate(self, sql: str) -> ExecutionResult:

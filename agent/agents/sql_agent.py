@@ -20,7 +20,8 @@ class SQLAgent:
         self,
         user_query: str,
         schema_context: str,
-        memory_context: str = ""
+        memory_context: str = "",
+        conversation_context: str = ""
     ) -> Dict[str, Any]:
         filled_prompt = self.prompt_template.replace(
             "{user_query}", user_query
@@ -28,6 +29,8 @@ class SQLAgent:
             "{schema_context}", schema_context
         ).replace(
             "{memory_context}", memory_context or "暂无历史参考"
+        ).replace(
+            "{conversation_context}", conversation_context or "无前序对话上下文"
         )
 
         messages = [
@@ -36,8 +39,15 @@ class SQLAgent:
         ]
 
         resp = self.model_client.chat(messages, tier=ModelTier.MEDIUM, json_mode=True)
-        if resp.parsed_json and "sql" in resp.parsed_json:
-            return resp.parsed_json
+        if resp.parsed_json:
+            if resp.parsed_json.get("needs_clarification"):
+                return {
+                    "needs_clarification": True,
+                    "clarification_question": resp.parsed_json.get("clarification_question") or "您的需求涉及多个数据表或关键信息不明确，请问您指的是哪张表的数据？",
+                    "explanation": resp.parsed_json.get("explanation", "需求存在多表歧义，需用户追问澄清")
+                }
+            if "sql" in resp.parsed_json:
+                return resp.parsed_json
 
         # 兜底字符串清洗
         sql_str = resp.content.strip()
@@ -47,6 +57,7 @@ class SQLAgent:
             sql_str = "\n".join(code_lines).strip()
 
         return {
+            "needs_clarification": False,
             "sql": sql_str,
             "explanation": "模型生成的 SQL 查询"
         }

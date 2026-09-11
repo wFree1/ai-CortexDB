@@ -10,7 +10,7 @@ load_dotenv()
 class AgentConfig(BaseModel):
     # Model configuration
     model_provider: str = Field(default_factory=lambda: os.getenv("MODEL_PROVIDER", "openai"))
-    model_name: str = Field(default_factory=lambda: os.getenv("MODEL_NAME", "gpt-4o-mini"))
+    model_name: str = Field(default_factory=lambda: os.getenv("MODEL_NAME", "qwen3.7-plus"))
     openai_api_base: str = Field(default_factory=lambda: os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1"))
     openai_api_key: str = Field(default_factory=lambda: os.getenv("OPENAI_API_KEY", ""))
     temperature: float = Field(default_factory=lambda: float(os.getenv("TEMPERATURE", "0.0")))

@@ -253,6 +253,30 @@ class Planner:
             inner_plan = self.generate_plan(ast_node.inner)
             return ExecutionPlan('Explain', {'inner_plan': inner_plan})
 
+        # SHOW DATABASES
+        if node_t == "ShowDatabasesNode":
+            return ExecutionPlan('ShowDatabases', {})
+
+        # CREATE DATABASE
+        if node_t == "CreateDatabaseNode":
+            return ExecutionPlan('CreateDatabase', {
+                'db_name': ast_node.db_name,
+                'if_not_exists': getattr(ast_node, 'if_not_exists', False)
+            })
+
+        # DROP DATABASE
+        if node_t == "DropDatabaseNode":
+            return ExecutionPlan('DropDatabase', {
+                'db_name': ast_node.db_name,
+                'if_exists': getattr(ast_node, 'if_exists', False)
+            })
+
+        # USE DATABASE
+        if node_t == "UseDatabaseNode":
+            return ExecutionPlan('UseDatabase', {
+                'db_name': ast_node.db_name
+            })
+
         # SHOW TABLES
         if node_t == "ShowTablesNode":
             return ExecutionPlan('ShowTables', {})

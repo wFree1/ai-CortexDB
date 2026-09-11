@@ -728,6 +728,9 @@ class FileManager:
         if deleted_count > 0:
             self.rebuild_indexes(table_name)
 
+        # 立即将内存缓冲池中被删除/修改的脏页持久化到静态数据文件 (.db)
+        self.flush_all()
+
         return deleted_count
 
     def add_page_to_table(self, table_name: str, page_id: int):
@@ -819,5 +822,8 @@ class FileManager:
         # 但我们可能需要更新一些统计信息，这里暂不处理
         if updated_count > 0:
             self.rebuild_indexes(table_name)
+
+        # 立即将内存缓冲池中被修改的脏页持久化到静态数据文件 (.db)
+        self.flush_all()
 
         return updated_count

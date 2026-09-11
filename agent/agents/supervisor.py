@@ -15,9 +15,12 @@ class SupervisorAgent:
         self.model_client = model_client
         self.prompt_template = load_prompt("router.md")
 
-    def route(self, user_query: str) -> Dict[str, Any]:
+    def route(self, user_query: str, conversation_context: str = "") -> Dict[str, Any]:
+        prompt = self.prompt_template
+        if conversation_context and conversation_context != "无前序对话上下文":
+            prompt = f"{prompt}\n\n## 近期多轮对话上下文\n{conversation_context}"
         messages = [
-            ChatMessage(role="system", content=self.prompt_template),
+            ChatMessage(role="system", content=prompt),
             ChatMessage(role="user", content=user_query)
         ]
         resp = self.model_client.chat(messages, tier=ModelTier.FAST, json_mode=True)

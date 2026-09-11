@@ -73,13 +73,14 @@ class SQLFirewall:
                     risk=risk,
                     reason="当前安全策略已禁用数据写入变更 (AGENT_ALLOW_WRITE=false)。"
                 )
-            if self.policy.require_approval_for_write:
+            # 无论默认写策略如何，对于 DELETE 和 UPDATE（破坏性修改），必须经用户/管理员确认后方可物理执行
+            if risk.statement_type in ("DELETE", "UPDATE") or self.policy.require_approval_for_write:
                 req = self.approval_mgr.create_request(task_id, session_id, sql, risk.risk_level, risk.statement_type, risk.reason)
                 return FirewallDecision(
                     allowed=False,
                     action="REQUIRE_APPROVAL",
                     risk=risk,
-                    reason="写操作需要人工管理员审批授权。",
+                    reason=f"破坏性数据操作 ({risk.statement_type}) 将物理修改或删除数据，必须等待用户确认后方可执行。",
                     approval_request=req
                 )
             return FirewallDecision(

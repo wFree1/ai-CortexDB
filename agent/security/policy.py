@@ -21,7 +21,7 @@ class SecurityPolicy(BaseModel):
             allow_write=cfg.allow_write,
             allow_ddl=cfg.allow_ddl,
             require_approval_for_admin=cfg.require_approval,
-            require_approval_for_write=False,
+            require_approval_for_write=cfg.require_approval,
             max_query_timeout_seconds=cfg.agent_timeout,
             deny_dangerous_always=True
         )

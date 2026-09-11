@@ -49,6 +49,7 @@ class Lexer:
         # 扩展 DDL / 管理命令
         'DROP', 'ALTER', 'ADD', 'COLUMN', 'TRUNCATE',
         'IF', 'EXISTS', 'INDEX', 'SHOW', 'TABLES', 'COLUMNS',
+        'DATABASE', 'DATABASES', 'USE',
         'DESC', 'DESCRIBE',
 
         # 扩展 DQL / 连接与限制

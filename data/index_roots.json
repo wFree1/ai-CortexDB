@@ -3,7 +3,8 @@
     "dept_id": 5
   },
   "employees": {
-    "emp_id": 7
+    "emp_id": 44,
+    "dept_id": 45
   },
   "products": {
     "prod_id": 9
@@ -12,12 +13,15 @@
     "order_id": 11
   },
   "student": {
-    "id": 25
+    "id": 50
   },
   "class": {
     "sid": 19
   },
   "dept": {
     "id": 21
+  },
+  "courses": {
+    "id": 27
   }
 }

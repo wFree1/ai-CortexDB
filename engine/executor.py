@@ -411,15 +411,24 @@ def _column_types_map(table_info: Dict[str, Any]) -> Dict[str, Tuple[str, Option
 
 # ---------------- 执行器 ----------------
 class Executor:
-    def __init__(self, file_manager: FileManager, catalog: Catalog):
+    def __init__(self, file_manager: FileManager, catalog: Catalog, db: Optional[Any] = None):
         self.storage_engine = StorageEngine(file_manager)
         self.file_manager = file_manager
         self.catalog = catalog
+        self.db = db
 
     def execute(self, plan: ExecutionPlan) -> Any:
         if plan.plan_type == "Explain":
             inner = plan.details.get("inner_plan")
             return inner.explain() if isinstance(inner, ExecutionPlan) else "Explain: <empty>"
+        if plan.plan_type == "ShowDatabases":
+            return self.execute_show_databases(plan)
+        if plan.plan_type == "CreateDatabase":
+            return self.execute_create_database(plan)
+        if plan.plan_type == "DropDatabase":
+            return self.execute_drop_database(plan)
+        if plan.plan_type == "UseDatabase":
+            return self.execute_use_database(plan)
         if plan.plan_type == "ShowTables":
             return self.execute_show_tables(plan)
         if plan.plan_type == "DescribeTable":
@@ -445,6 +454,31 @@ class Executor:
         if plan.plan_type == "Update":
             return self.execute_update(plan)
         raise Exception(f"Unsupported execution plan: {plan.plan_type}")
+
+    # ---------- Database Admin ----------
+    def execute_show_databases(self, plan: ExecutionPlan) -> List[Dict[str, Any]]:
+        dbs = self.db.list_databases() if self.db else ["datasphere"]
+        return [{"Database": d} for d in dbs]
+
+    def execute_create_database(self, plan: ExecutionPlan) -> str:
+        db_name = plan.details["db_name"]
+        if_not_exists = plan.details.get("if_not_exists", False)
+        if self.db:
+            return self.db.create_database(db_name, if_not_exists=if_not_exists)
+        return f"Database '{db_name}' created successfully."
+
+    def execute_drop_database(self, plan: ExecutionPlan) -> str:
+        db_name = plan.details["db_name"]
+        if_exists = plan.details.get("if_exists", False)
+        if self.db:
+            return self.db.drop_database(db_name, if_exists=if_exists)
+        return f"Database '{db_name}' dropped successfully."
+
+    def execute_use_database(self, plan: ExecutionPlan) -> str:
+        db_name = plan.details["db_name"]
+        if self.db:
+            return self.db.use_database(db_name)
+        return f"Database changed to '{db_name}'."
 
     # ---------- DDL/Admin ----------
     def execute_show_tables(self, plan: ExecutionPlan) -> List[Dict[str, Any]]:
@@ -726,6 +760,7 @@ class Executor:
         cond = condition if condition is not None else raw_condition
         deleted = self.file_manager.delete_records(table_name, cond)
         self.catalog.update_row_count(table_name, max(0, table_info["row_count"] - deleted))
+        self.file_manager.flush_all()
         return f"{deleted} row(s) deleted from '{table_name}'"
 
     def execute_update(self, plan: ExecutionPlan) -> str:
@@ -783,6 +818,7 @@ class Executor:
                         })
                         self.execute_update(cascade_plan)
 
+        self.file_manager.flush_all()
         return f"Updated {updated} row(s)"
 
     # ---------- SELECT ----------

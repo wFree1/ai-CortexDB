@@ -196,7 +196,54 @@ class StudioRequestHandler(BaseHTTPRequestHandler):
 
         db = get_db()
         with db_lock:
-            # 1) 获取概览状态
+            # 1) 获取所有数据库及元数据树
+            if path == '/api/databases':
+                dbs = db.list_databases()
+                detail_list = []
+                for db_name in dbs:
+                    is_active = (db_name == db.current_database)
+                    tbl_list = []
+                    if is_active:
+                        cat = db.catalog
+                        for t_name in sorted(cat.list_tables()):
+                            info = cat.get_table_info(t_name) or {}
+                            tbl_list.append({
+                                "name": t_name,
+                                "columns": info.get("columns", []),
+                                "primary_key": info.get("primary_key"),
+                                "row_count": info.get("row_count", 0),
+                            })
+                    else:
+                        db_path = db._get_database_path(db_name)
+                        cat_path = os.path.join(db_path, "catalog.json")
+                        if os.path.exists(cat_path):
+                            try:
+                                with open(cat_path, 'r', encoding='utf-8') as f:
+                                    t_data = json.load(f)
+                                if isinstance(t_data, dict):
+                                    for t_name in sorted(t_data.keys()):
+                                        info = t_data[t_name] or {}
+                                        tbl_list.append({
+                                            "name": t_name,
+                                            "columns": info.get("columns", []),
+                                            "primary_key": info.get("primary_key"),
+                                            "row_count": info.get("row_count", 0),
+                                        })
+                            except Exception:
+                                pass
+                    detail_list.append({
+                        "name": db_name,
+                        "is_active": is_active,
+                        "table_count": len(tbl_list),
+                        "tables": tbl_list
+                    })
+                self._send_json({
+                    "databases": dbs,
+                    "current_database": db.current_database,
+                    "databases_detail": detail_list
+                })
+                return
+
             if path == '/api/overview':
                 catalog = db.catalog
                 tables = catalog.list_tables()
@@ -209,13 +256,16 @@ class StudioRequestHandler(BaseHTTPRequestHandler):
                 dirty_pages = len(getattr(bp, 'dirty_pages', set()))
                 cached_pages = len(getattr(bp, 'page_table', {}))
 
-                db_file = os.path.join(DATA_DIR, 'datasphere.db')
+                cur_path = db._get_database_path(db.current_database)
+                db_file = os.path.join(cur_path, 'datasphere.db')
                 file_size_kb = os.path.getsize(db_file) / 1024 if os.path.exists(db_file) else 0
 
                 self._send_json({
                     "status": "online",
-                    "database_name": "datasphere",
-                    "storage_file": "datasphere.db",
+                    "database_name": db.current_database,
+                    "current_database": db.current_database,
+                    "databases": db.list_databases(),
+                    "storage_file": f"{db.current_database}.db",
                     "file_size_kb": round(file_size_kb, 2),
                     "table_count": len(tables),
                     "total_records": total_rows,
@@ -346,24 +396,45 @@ class StudioRequestHandler(BaseHTTPRequestHandler):
             req_data = {}
 
         db = get_db()
-        with db_lock:
-            # 1) 一键植入演示数据
-            if path == '/api/seed_demo':
+
+        # 1) 一键植入演示数据
+        if path == '/api/seed_demo':
+            with db_lock:
                 seed_demo_data(db)
-                self._send_json({"success": True, "message": "Demo tables and records loaded successfully!"})
+            self._send_json({"success": True, "message": "Demo tables and records loaded successfully!"})
+            return
+
+        # 切换当前激活数据库
+        if path == '/api/database/switch':
+            target_db = req_data.get('database', '').strip()
+            if not target_db:
+                self._send_json({"error": "Database name is required"}, status=400)
+                return
+            with db_lock:
+                try:
+                    msg = db.use_database(target_db)
+                    self._send_json({
+                        "success": True,
+                        "message": msg,
+                        "current_database": db.current_database,
+                        "databases": db.list_databases()
+                    })
+                except Exception as e:
+                    self._send_json({"error": str(e)}, status=400)
+            return
+
+        # 2) 执行任意 SQL 语句 (支持单条或多条批处理)
+        if path == '/api/execute':
+            sql_input = req_data.get('sql', '').strip()
+            if not sql_input:
+                self._send_json({"error": "Empty SQL query"}, status=400)
                 return
 
-            # 2) 执行任意 SQL 语句 (支持单条或多条批处理)
-            if path == '/api/execute':
-                sql_input = req_data.get('sql', '').strip()
-                if not sql_input:
-                    self._send_json({"error": "Empty SQL query"}, status=400)
-                    return
+            stmts = split_sql_statements(sql_input)
+            results = []
+            total_t0 = time.time()
 
-                stmts = split_sql_statements(sql_input)
-                results = []
-                total_t0 = time.time()
-
+            with db_lock:
                 for s in stmts:
                     t0 = time.time()
                     # 尝试生成逻辑执行计划 explain
@@ -396,54 +467,180 @@ class StudioRequestHandler(BaseHTTPRequestHandler):
                         "explain_plan": explain_text
                     })
 
-                total_cost_ms = round((time.time() - total_t0) * 1000, 2)
-                self._send_json({
-                    "total_statements": len(stmts),
-                    "total_execution_time_ms": total_cost_ms,
-                    "results": results
+            total_cost_ms = round((time.time() - total_t0) * 1000, 2)
+            self._send_json({
+                "total_statements": len(stmts),
+                "total_execution_time_ms": total_cost_ms,
+                "results": results,
+                "current_database": db.current_database,
+                "databases": db.list_databases()
+            })
+            return
+
+        # Agent 相关 POST 路由
+        if path == '/api/agent/chat':
+            query_text = req_data.get('query', '').strip()
+            session_id = req_data.get('session_id', 'studio_session')
+            if not query_text:
+                self._send_json({"error": "Empty query"}, status=400)
+                return
+            svc = get_agent_service()
+            res = svc.run(query=query_text, session_id=session_id)
+            self._send_json(res)
+            return
+
+        if path == '/api/agent/stream':
+            query_text = req_data.get('query', '').strip()
+            session_id = req_data.get('session_id', 'studio_session')
+            if not query_text:
+                self._send_json({"error": "Empty query"}, status=400)
+                return
+
+            # 发送 SSE 响应头
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/event-stream; charset=utf-8')
+            self.send_header('Cache-Control', 'no-cache')
+            self.send_header('Connection', 'keep-alive')
+            self.send_header('X-Accel-Buffering', 'no')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+
+            import queue
+            import re
+
+            event_q = queue.Queue()
+            stop_event = threading.Event()
+
+            def event_listener(evt):
+                if not stop_event.is_set():
+                    event_q.put(('agent_event', evt))
+
+            svc = get_agent_service()
+            svc.event_bus.subscribe(event_listener)
+
+            final_result_container = {}
+            error_container = {}
+
+            def run_agent():
+                try:
+                    res = svc.run(query=query_text, session_id=session_id)
+                    final_result_container['res'] = res
+                except Exception as ex:
+                    error_container['err'] = str(ex)
+                finally:
+                    stop_event.set()
+                    event_q.put(('agent_done', None))
+
+            worker_thread = threading.Thread(target=run_agent, daemon=True)
+            worker_thread.start()
+
+            def send_sse(event_type: str, data_dict: dict):
+                payload = f"event: {event_type}\ndata: {json.dumps(data_dict, ensure_ascii=False)}\n\n"
+                self.wfile.write(payload.encode('utf-8'))
+                self.wfile.flush()
+
+            try:
+                send_sse('start', {"query": query_text, "timestamp": time.time()})
+
+                # 循环获取并推送思考推理事件
+                while not stop_event.is_set() or not event_q.empty():
+                    try:
+                        item_type, item_data = event_q.get(timeout=0.08)
+                    except queue.Empty:
+                        continue
+
+                    if item_type == 'agent_event':
+                        send_sse('step', item_data.to_dict())
+                    elif item_type == 'agent_done':
+                        break
+
+                if 'err' in error_container:
+                    send_sse('error', {"error": error_container['err']})
+                    return
+
+                res = final_result_container.get('res', {})
+                raw_answer = res.get('answer', '') or res.get('final_answer', '')
+
+                # 检查是否有 <think>...</think> 或 <thought>...</thought> 思考块
+                model_thinking = None
+                clean_answer = raw_answer
+
+                think_match = re.search(r'<think>(.*?)</think>', raw_answer, re.DOTALL)
+                if think_match:
+                    model_thinking = think_match.group(1).strip()
+                    clean_answer = re.sub(r'<think>.*?</think>', '', raw_answer, flags=re.DOTALL).strip()
+                else:
+                    thought_match = re.search(r'<thought>(.*?)</thought>', raw_answer, re.DOTALL)
+                    if thought_match:
+                        model_thinking = thought_match.group(1).strip()
+                        clean_answer = re.sub(r'<thought>.*?</thought>', '', raw_answer, flags=re.DOTALL).strip()
+
+                if model_thinking:
+                    send_sse('model_thought', {"thought": model_thinking})
+
+                # 逐字/微批次推流打字效果 (10-15ms 拟人化流式输出)
+                chunk_size = 2
+                for i in range(0, len(clean_answer), chunk_size):
+                    chunk = clean_answer[i:i + chunk_size]
+                    send_sse('token', {"token": chunk})
+                    time.sleep(0.012)
+
+                # 发送最终完成包 (包含生成的 SQL、执行计划、执行结果及安全审批单)
+                send_sse('done', {
+                    "generated_sql": res.get("generated_sql"),
+                    "execution_result": res.get("execution_result"),
+                    "explain": res.get("explain"),
+                    "needs_clarification": res.get("needs_clarification"),
+                    "clarification_question": res.get("clarification_question"),
+                    "approval_required": res.get("approval_required"),
+                    "approval_request_id": res.get("approval_request_id"),
+                    "risk_level": res.get("risk_level"),
+                    "validation": res.get("validation"),
+                    "retry_count": res.get("retry_count", 0),
+                    "final_answer": clean_answer
                 })
-                return
 
-            # Agent 相关 POST 路由
-            if path == '/api/agent/chat':
-                query_text = req_data.get('query', '').strip()
-                session_id = req_data.get('session_id', 'studio_session')
-                if not query_text:
-                    self._send_json({"error": "Empty query"}, status=400)
-                    return
-                svc = get_agent_service()
-                res = svc.run(query=query_text, session_id=session_id)
-                self._send_json(res)
-                return
+            except (ConnectionResetError, BrokenPipeError):
+                pass
+            except Exception as ex:
+                try:
+                    send_sse('error', {"error": str(ex)})
+                except Exception:
+                    pass
+            finally:
+                stop_event.set()
+                if hasattr(svc.event_bus, 'unsubscribe'):
+                    svc.event_bus.unsubscribe(event_listener)
+            return
 
-            if path == '/api/agent/approve':
-                request_id = req_data.get('request_id', '')
-                svc = get_agent_service()
-                mgr = svc.firewall.approval_mgr
+        if path == '/api/agent/approve':
+            request_id = req_data.get('request_id', '')
+            svc = get_agent_service()
+            mgr = svc.firewall.approval_mgr
+            req = mgr.get_request(request_id)
+            if not req:
+                self._send_json({"success": False, "error": "Approval request not found"}, status=404)
+                return
+            if mgr.approve(request_id):
+                exec_res = svc.adapter.execute(req.sql)
+                svc.hooks.trigger_on_approval(req.task_id, request_id, req.sql, "APPROVED")
+                self._send_json({"success": True, "status": "APPROVED", "result": exec_res})
+            else:
+                self._send_json({"success": False, "error": "Request cannot be approved"}, status=400)
+            return
+
+        if path == '/api/agent/reject':
+            request_id = req_data.get('request_id', '')
+            svc = get_agent_service()
+            mgr = svc.firewall.approval_mgr
+            if mgr.reject(request_id):
                 req = mgr.get_request(request_id)
-                if not req:
-                    self._send_json({"success": False, "error": "Approval request not found"}, status=404)
-                    return
-                if mgr.approve(request_id):
-                    exec_res = svc.adapter.execute(req.sql)
-                    svc.hooks.trigger_on_approval(req.task_id, request_id, req.sql, "APPROVED")
-                    self._send_json({"success": True, "status": "APPROVED", "result": exec_res})
-                else:
-                    self._send_json({"success": False, "error": "Request cannot be approved"}, status=400)
-                return
-
-            if path == '/api/agent/reject':
-                request_id = req_data.get('request_id', '')
-                svc = get_agent_service()
-                mgr = svc.firewall.approval_mgr
-                if mgr.reject(request_id):
-                    req = mgr.get_request(request_id)
-                    if req:
-                        svc.hooks.trigger_on_approval(req.task_id, request_id, req.sql, "REJECTED")
-                    self._send_json({"success": True, "status": "REJECTED"})
-                else:
-                    self._send_json({"success": False, "error": "Request cannot be rejected"}, status=400)
-                return
+                if req:
+                    svc.hooks.trigger_on_approval(req.task_id, request_id, req.sql, "REJECTED")
+                self._send_json({"success": True, "status": "REJECTED"})
+            else:
+                self._send_json({"success": False, "error": "Request cannot be rejected"}, status=400)
+            return
 
         self.send_error(404, "Endpoint not found")
 

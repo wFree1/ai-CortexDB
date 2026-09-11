@@ -83,10 +83,11 @@ class ExecutionService:
             # 更新用户会话历史
             self.memory_mgr.conversation.add_message(session_id, "user", query)
 
+            history_messages = self.memory_mgr.conversation.get_messages(session_id)
             initial_state = {
                 "request_id": task_id,
                 "session_id": session_id,
-                "messages": [{"role": "user", "content": query}]
+                "messages": history_messages if history_messages else [{"role": "user", "content": query}]
             }
 
             try:
@@ -121,6 +122,8 @@ class ExecutionService:
                     "generated_sql": sql,
                     "validation": final_state.get("validation"),
                     "explain": final_state.get("explain"),
+                    "needs_clarification": final_state.get("needs_clarification", False),
+                    "clarification_question": final_state.get("clarification_question"),
                     "approval_required": final_state.get("approval_required", False),
                     "approval_request_id": final_state.get("approval_request_id"),
                     "risk_level": final_state.get("risk_level"),
@@ -128,6 +131,7 @@ class ExecutionService:
                     "execution_result": final_state.get("execution_result"),
                     "optimization_comparison": final_state.get("optimization_comparison"),
                     "answer": answer,
+                    "final_answer": answer,
                     "latency_ms": round(latency, 2)
                 }
 

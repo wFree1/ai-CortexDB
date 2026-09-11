@@ -31,7 +31,10 @@
 
         <div class="db-status-pill" id="db-status-badge">
           <span class="status-dot online"></span>
-          <span id="header-db-name">datasphere.db</span>
+          <select id="header-db-select" class="header-db-dropdown" title="当前连接数据库 (点击切换或在 SQL 中使用 USE 命令)">
+            <option value="datasphere">datasphere</option>
+          </select>
+          <span id="header-db-name" style="display:none;">datasphere</span>
           <span class="pill-divider">|</span>
           <span id="header-hit-rate" title="BufferPool 缓存命中率">命中率: 100%</span>
         </div>

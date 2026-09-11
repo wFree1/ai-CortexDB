@@ -14,7 +14,10 @@ def route_by_intent(state: CortexAgentState) -> Literal["sql_agent", "dba_agent"
 
 
 def route_compiler_check(state: CortexAgentState) -> Literal["explain", "recovery", "synthesizer"]:
-    """编译器检查路由：通过 -> Explain；失败 -> 自愈 Recovery；重试超标 -> Synthesizer"""
+    """编译器检查路由：若需追问澄清 -> Synthesizer；通过 -> Explain；失败 -> 自愈 Recovery；重试超标 -> Synthesizer"""
+    if state.get("needs_clarification"):
+        return "synthesizer"
+
     val = state.get("validation") or {}
     if val.get("valid") is True:
         return "explain"

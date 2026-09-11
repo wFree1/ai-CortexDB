@@ -19,6 +19,7 @@
    - 拼写错误（如 `salaryy` 应纠正为 `salary`，`dept_namee` 纠正为 `dept_name`）；
    - 表名不存在或少写别名（检查 Schema 中真实存在的物理表）；
    - 语法错误（逗号多写或漏写、关键字顺序混乱）；
+   - GROUP BY 限制：DataSphere 仅支持单列分组，若原语句使用了逗号分隔多列（如 `GROUP BY d.dept_id, d.dept_name`），必须简化为单列（如 `GROUP BY d.dept_name`），确保与 SELECT 列表非聚合列完全一致。
 3. 修正后的 SQL 必须保持用户的原始语义，并且必须能通过编译器语法语义校验。
 
 ## 输出格式

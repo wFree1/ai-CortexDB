@@ -1,0 +1,24 @@
+{
+  "departments": {
+    "columns": [
+      {
+        "name": "dept_id",
+        "type": "INT"
+      },
+      {
+        "name": "dept_name",
+        "type": "VARCHAR(50)"
+      }
+    ],
+    "primary_key": "dept_id",
+    "row_count": 4,
+    "constraints": [
+      [
+        "PRIMARY_KEY",
+        "dept_id",
+        "",
+        ""
+      ]
+    ]
+  }
+}

@@ -19,6 +19,7 @@ class EventType(str, Enum):
     TOOL_COMPLETED = "tool.completed"
     APPROVAL_REQUIRED = "approval.required"
     APPROVAL_RESOLVED = "approval.resolved"
+    CLARIFICATION_REQUIRED = "clarification.required"
     SQL_EXECUTED = "sql.executed"
     ANALYSIS_COMPLETED = "analysis.completed"
     AGENT_COMPLETED = "agent.completed"
@@ -55,6 +56,10 @@ class EventBus:
 
     def subscribe(self, callback: Callable[[AgentEvent], Any]):
         self._listeners.append(callback)
+
+    def unsubscribe(self, callback: Callable[[AgentEvent], Any]):
+        if callback in self._listeners:
+            self._listeners.remove(callback)
 
     def publish(self, event: AgentEvent):
         # 同步回调
