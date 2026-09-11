@@ -9,7 +9,7 @@
 
 `ai-CortexDB 2.0` 是一个自研的轻量级关系型数据库内核与全流程 AI Agent 深度结合的数据库系统。它不仅拥有自主实现的存储引擎、索引与编译器，还深度植入了基于 LangGraph 编排的智能体运行时，具备**自主语法纠错**、**主动需求澄清**、**确定性安全防火墙**与**沉浸式 Web Studio 工作台**。
 
-```mermaid
+```
 graph TD
     User([用户 / 开发者]) <--> WebStudio[Navicat-Style Web Studio (8088)]
     WebStudio <--> AgentRuntime[Cortex Agent Runtime (LangGraph)]
