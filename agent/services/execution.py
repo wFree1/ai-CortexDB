@@ -66,9 +66,10 @@ class ExecutionService:
         query: str,
         session_id: str = "default_session",
         user_id: str = "default_user",
-        user_role: str = "developer"
+        user_role: str = "developer",
+        task_id: Optional[str] = None,
     ) -> Dict[str, Any]:
-        task_id = f"task_{uuid.uuid4().hex[:8]}"
+        task_id = task_id or f"task_{uuid.uuid4().hex[:8]}"
         ctx = MiddlewareContext(
             trace_id=task_id,
             session_id=session_id,

@@ -1,6 +1,7 @@
 # agent/api/app.py
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
 
 from agent.api.routes_agent import router as agent_router
@@ -8,16 +9,18 @@ from agent.api.routes_sql import router as sql_router
 from agent.api.routes_dba import router as dba_router
 from agent.api.routes_tasks import router as tasks_router
 from agent.api.routes_memory import router as memory_router
-from agent.api.dependencies import get_services
+from agent.api.dependencies import close_services, get_services
+from web.studio_routes import STATIC_DIR, router as studio_router
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # 初始化单例服务
-    exec_svc, _, _ = get_services()
-    yield
-    # 关闭数据库适配器连接
-    exec_svc.close()
+    get_services()
+    try:
+        yield
+    finally:
+        close_services()
 
 
 def create_app() -> FastAPI:
@@ -42,6 +45,8 @@ def create_app() -> FastAPI:
     app.include_router(dba_router)
     app.include_router(tasks_router)
     app.include_router(memory_router)
+    app.include_router(studio_router)
+    app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
     @app.get("/health")
     def health_check():

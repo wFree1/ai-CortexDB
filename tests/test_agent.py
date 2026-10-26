@@ -179,27 +179,26 @@ class TestCortexDBAgent(unittest.TestCase):
 
     # 7. FastAPI Endpoints & Observability Tests
     def test_07_fastapi_endpoints(self):
-        client = TestClient(app)
+        with TestClient(app) as client:
+            # Health
+            res_health = client.get("/health")
+            self.assertEqual(res_health.status_code, 200)
 
-        # Health
-        res_health = client.get("/health")
-        self.assertEqual(res_health.status_code, 200)
+            # Chat
+            res_chat = client.post("/api/v1/agent/chat", json={"query": "SELECT * FROM employees;"})
+            self.assertEqual(res_chat.status_code, 200)
+            self.assertTrue(res_chat.json().get("success"))
 
-        # Chat
-        res_chat = client.post("/api/v1/agent/chat", json={"query": "SELECT * FROM employees;"})
-        self.assertEqual(res_chat.status_code, 200)
-        self.assertTrue(res_chat.json().get("success"))
+            # SQL Validate
+            res_val = client.post("/api/v1/sql/validate", json={"sql": "SELECT * FROM employees;"})
+            self.assertEqual(res_val.status_code, 200)
+            self.assertTrue(res_val.json().get("valid"))
 
-        # SQL Validate
-        res_val = client.post("/api/v1/sql/validate", json={"sql": "SELECT * FROM employees;"})
-        self.assertEqual(res_val.status_code, 200)
-        self.assertTrue(res_val.json().get("valid"))
-
-        # Metrics
-        res_met = client.get("/api/v1/dba/metrics")
-        self.assertEqual(res_met.status_code, 200)
-        self.assertIn("database", res_met.json())
-        self.assertIn("agent", res_met.json())
+            # Metrics
+            res_met = client.get("/api/v1/dba/metrics")
+            self.assertEqual(res_met.status_code, 200)
+            self.assertIn("database", res_met.json())
+            self.assertIn("agent", res_met.json())
 
 
 if __name__ == "__main__":

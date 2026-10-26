@@ -29,5 +29,5 @@ if __name__ == '__main__':
     # 后台线程尝试唤起默认浏览器
     threading.Thread(target=open_browser, daemon=True).start()
 
-    # 启动多线程 Web 服务器
+    # 启动统一的 FastAPI 服务
     start_server(port=port)

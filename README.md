@@ -12,7 +12,8 @@
 ```
 graph TD
     User([用户 / 开发者]) <--> WebStudio[Navicat-Style Web Studio (8088)]
-    WebStudio <--> AgentRuntime[Cortex Agent Runtime (LangGraph)]
+    WebStudio <--> FastAPI[统一 FastAPI 服务]
+    FastAPI <--> AgentRuntime[Cortex Agent Runtime (LangGraph)]
     
     subgraph AgentRuntime [AI Agent 认知运行时]
         Supervisor[意图分流路由器 Supervisor]
@@ -120,6 +121,8 @@ python run_studio.py
 
 终端将输出服务地址，在浏览器中打开：
 👉 **http://127.0.0.1:8088**
+
+Studio 页面、`/api/...` Web 接口与 `/api/v1/...` Agent 接口由同一个 FastAPI 服务提供；接口文档位于 **http://127.0.0.1:8088/docs**。
 
 ---
 
